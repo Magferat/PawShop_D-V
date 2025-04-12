@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import AdminMenu from "./AdminMenu";
+// import AdminMenu from "./AdminMenu";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useUpdateProductMutation,
@@ -134,7 +134,7 @@ const AdminProductUpdate = () => {
     <>
       <div className="container  xl:mx-[9rem] sm:mx-[0]">
         <div className="flex flex-col md:flex-row">
-          <AdminMenu />
+          {/* <AdminMenu /> */}
           <div className="md:w-3/4 p-3">
             <div className="h-12">Update / Delete Product</div>
 

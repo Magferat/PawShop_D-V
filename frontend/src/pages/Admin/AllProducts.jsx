@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { useAllProductsQuery } from "../../redux/api/productApiSlice";
-import AdminMenu from "./AdminMenu";
+// import AdminMenu from "./AdminMenu";
 
 const AllProducts = () => {
   const { data: products, isLoading, isError } = useAllProductsQuery();
@@ -81,7 +81,7 @@ const AllProducts = () => {
             </div>
           </div>
           <div className="md:w-1/4 p-3 mt-2">
-            <AdminMenu />
+            {/* <AdminMenu /> */}
           </div>
         </div>
       </div>
