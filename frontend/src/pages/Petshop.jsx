@@ -8,6 +8,7 @@ import PetCard from "./Pets/PetCard";
 const PetShop = () => {
   const dispatch = useDispatch();
   const { checked = [], pets = [] } = useSelector((state) => state.petShop);
+  const { userInfo } = useSelector((state) => state.auth);
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
@@ -18,16 +19,32 @@ const PetShop = () => {
     checked,
     search,
   });
-  console.log("Fetched pets from RTK Query:", petData);
-
+  
   // This only runs ONCE when the filtered petData is fetched
   useEffect(() => {
-    if (!loadingPets && petData.length) {
-      dispatch(setPets(petData));
-    }
-  }, [loadingPets, petData, dispatch]);
 
-  // Local filtering based on species
+    if (loadingPets) return;
+
+    if (!userInfo || userInfo?.isAdmin) {
+      dispatch(setPets(petData));
+      return;
+    }
+
+    if (!loadingPets && userInfo?._id) {
+      const filtered = petData.filter((pet) => {
+        const ownerId = pet.ownerId?._id || pet.ownerId;
+  
+        const isOwned = ownerId?.toString() === userInfo._id.toString();
+        
+        console.log(`Pet: ${pet.name}, ownerId: ${ownerId}, userId: ${userInfo._id}, isOwned: ${isOwned}`);
+        
+        return !isOwned;
+      });
+      dispatch(setPets(filtered));
+    }
+  }, [loadingPets, petData, dispatch, userInfo]);
+
+  // Local filtering based on status
   const filteredPets = status
     ? pets.filter((p) => p.status === status)
     : pets;

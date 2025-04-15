@@ -38,9 +38,11 @@ import Shop from "./pages/Shop.jsx";
 
 import Petshop from "./pages/Petshop.jsx";
 import AddPet from "./pages/Pets/Addpet.jsx"; 
-import PetDetails from "./pages/Pets/Petdetails.jsx";
+import PetDetails from "./pages/Pets/PetDetails.jsx";
 import EditPet from "./pages/Pets/EditPet.jsx"; 
 import PetList from "./pages/Pets/PetList.jsx"; 
+
+
 
 
 const router = createBrowserRouter(
