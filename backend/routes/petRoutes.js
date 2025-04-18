@@ -7,7 +7,7 @@ import {
   addPet,
   updatePetDetails,
   removePet,
-  fetchPets,
+  // fetchPets,
   fetchPetById,
   fetchAllPets,
   fetchNewPets,
@@ -17,9 +17,9 @@ import { authenticate } from "../middlewares/authMiddleware.js";
 import checkId from "../middlewares/checkId.js";
 
 // Route to fetch all pets or add a new pet
-router
-  .route("/petshop")
-  .get(fetchPets) // GET all pets with pagination and search functionality
+// router
+//   .route("/petshop")
+//   .get(fetchPets) // GET all pets with pagination and search functionality
 
   router
   .route("/addpet")

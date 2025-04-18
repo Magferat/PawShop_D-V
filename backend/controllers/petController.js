@@ -122,40 +122,40 @@ const removePet = asyncHandler(async (req, res) => {
 });
 
 // Fetch all pets (pagination and search)
-const fetchPets = asyncHandler(async (req, res) => {
-  try {
-    const pageSize = 6;
+// const fetchPets = asyncHandler(async (req, res) => {
+//   try {
+//     const pageSize = 6;
 
-    const keyword = req.query.keyword
-      ? {
-          $or: [
-            { name: { $regex: req.query.keyword, $options: "i" } },
-            { species: { $regex: req.query.keyword, $options: "i" } },
-            { breed: { $regex: req.query.keyword, $options: "i" } },
-            { gender: { $regex: req.query.keyword, $options: "i" } },
-            { size: { $regex: req.query.keyword, $options: "i" } },
-            { color: { $regex: req.query.keyword, $options: "i" } },
-            { status: { $regex: req.query.keyword, $options: "i" } },
-            { description: { $regex: req.query.keyword, $options: "i" } },
-            { location: { $regex: req.query.keyword, $options: "i" } },
-          ],
-        }
-      : {};
+//     const keyword = req.query.keyword
+//       ? {
+//           $or: [
+//             { name: { $regex: req.query.keyword, $options: "i" } },
+//             { species: { $regex: req.query.keyword, $options: "i" } },
+//             { breed: { $regex: req.query.keyword, $options: "i" } },
+//             { gender: { $regex: req.query.keyword, $options: "i" } },
+//             { size: { $regex: req.query.keyword, $options: "i" } },
+//             { color: { $regex: req.query.keyword, $options: "i" } },
+//             { status: { $regex: req.query.keyword, $options: "i" } },
+//             { description: { $regex: req.query.keyword, $options: "i" } },
+//             { location: { $regex: req.query.keyword, $options: "i" } },
+//           ],
+//         }
+//       : {};
 
-    const count = await Pet.countDocuments({ ...keyword });
-    const pets = await Pet.find({ ...keyword }).limit(pageSize);
+//     const count = await Pet.countDocuments({ ...keyword });
+//     const pets = await Pet.find({ ...keyword }).limit(pageSize);
 
-    res.json({
-      pets,
-      page: 1,
-      pages: Math.ceil(count / pageSize),
-      hasMore: false,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server Error" });
-  }
-});
+//     res.json({
+//       pets,
+//       page: 1,
+//       pages: Math.ceil(count / pageSize),
+//       hasMore: false,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Server Error" });
+//   }
+// });
 
 // Fetch a specific pet by ID
 const fetchPetById = asyncHandler(async (req, res) => {
@@ -234,7 +234,7 @@ export {
   addPet,
   updatePetDetails,
   removePet,
-  fetchPets,
+  // fetchPets,
   fetchPetById,
   fetchAllPets,
   fetchNewPets,
