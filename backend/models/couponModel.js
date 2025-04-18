@@ -1,19 +1,26 @@
-import mongoose from "mongoose";
-const { ObjectId } = mongoose.Schema;
+import mongoose from 'mongoose';
 
-const couponSchema = mongoose.Schema(
-  {
-    user: { type: mongoose.Schema.Types.ObjectId, required: false, ref: "User" },
-    name: { type: String, required: true },
-    type: { type: String, enum: ['Discount', 'Services', 'Product'], required: true },
-    points: { type: Number, required: true }, 
-    discountpercentage: { type: Number, required: false },
-    description: { type: String, required: false },
-    freeproduct: { type: String, required: false},
-    servicename: { type: String, required: false},
+const CouponSchema = new mongoose.Schema({
+  templateCode: { // e.g., "25-OFF-GROOM"
+    type: String,
+    required: true,
+    unique: true,
   },
-  { timestamps: true }
-);
+  discountValue: {
+    type: Number,
+    required: true,
+  },
+  pointCost: {
+    type: Number,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+}, {
+  timestamps: true,
+});
 
-const Coupon = mongoose.model("Coupon", couponSchema);
+const Coupon = mongoose.model('Coupon', CouponSchema);
 export default Coupon;
