@@ -48,7 +48,7 @@ const TopNavbar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/admin/allcouponslist" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link to="/admin/allcoupons" className="block px-4 py-2 hover:bg-gray-100">
                       Coupon List
                     </Link>
                   </li>
@@ -58,25 +58,41 @@ const TopNavbar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/admin/createcoupon" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link to="/admin/addcoupon" className="block px-4 py-2 hover:bg-gray-100">
                       Create Coupon
                     </Link>
                   </li>
-                </>
-              ) : (
-                <>
                   <li>
                     <Link to="/productshop" className="block px-4 py-2 hover:bg-gray-100">
                       Shop Products
                     </Link>
                   </li>
                   <li>
-                    <Link to="/coupons" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link to="/couponshop" className="block px-4 py-2 hover:bg-gray-100">
                       Shop Coupons
                     </Link>
                   </li>
                 </>
+              ) : ( 
+                <>
+                  <li>
+                    <Link to="/productshop" className="block px-4 py-2 hover:bg-gray-100">
+                      Shop Products
+                    </Link>
+                  </li>
+                </>
               )}
+              {userInfo && !userInfo.isAdmin && (
+              <li>
+                  <Link
+                  to="/my-coupons"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                  My Coupons
+                  </Link>
+              </li>
+           
+                )}
             </ul>
           </li>
 

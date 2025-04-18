@@ -44,6 +44,13 @@ import PetList from "./pages/Pets/PetList.jsx";
 
 import OwnerDetails from "./pages/Pets/PetOwner.jsx";
 
+import AddCoupon from "./pages/Coupons/AddCoupon.jsx";
+import ShopCoupons from "./pages/Coupons/ShopCoupons.jsx";
+import MyCoupons from "./pages/Coupons/MyCoupons.jsx";
+import AllCouponsAdmin from "./pages/Coupons/AllCoupons.jsx";
+
+
+//These are all frontend routes
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -68,6 +75,10 @@ const router = createBrowserRouter(
         <Route path="/pets/edit/:id" element={<EditPet />} />
         <Route path="/petlist" element={<PetList />} />
         <Route path="/owner/:id" element={<OwnerDetails />} />
+        <Route path="/couponshop" element={<ShopCoupons />} />
+        <Route path="/my-coupons" element={<MyCoupons />} />
+
+      
       </Route>
 
       <Route path="/admin" element={<AdminRoute />}>
@@ -79,6 +90,8 @@ const router = createBrowserRouter(
         <Route path="product/update/:_id" element={<ProductUpdate />} />
         {/* <Route path="orderlist" element={<OrderList />} /> */}
         {/* <Route path="dashboard" element={<AdminDashboard />} /> */}
+        <Route path="addcoupon" element={<AddCoupon />} />
+        <Route path="allcoupons" element={<AllCouponsAdmin />} />
       </Route>
     </Route>
   )

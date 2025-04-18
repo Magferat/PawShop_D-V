@@ -6,3 +6,5 @@ export const UPLOAD_URL = "/api/upload";
 export const ORDERS_URL = "/api/orders";
 export const PET_URL = "/api/pets";
 export const PAYPAL_URL = "/api/config/paypal";
+export const PET_REQUEST_URL = "/api/requests";
+export const COUPON_URL = "/api/coupons";

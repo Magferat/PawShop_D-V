@@ -12,7 +12,7 @@ const typeMap = {
 // POST /api/requests/:id
 const createRequest = asyncHandler(async (req, res) => {
   const petId = req.params.id;
-  const pet = await Pet.findById(petId);
+  const pet = await Pet.findById(petId).populate("ownerId", "_id");
 
   if (!pet) {
     res.status(404);
@@ -34,7 +34,8 @@ const createRequest = asyncHandler(async (req, res) => {
     throw new Error("Request already sent for this pet");
   }
 
-  const formattedType = typeMap[pet.status?.toLowerCase()];
+  const normalizedStatus = pet.status?.toLowerCase().trim();
+  const formattedType = typeMap[normalizedStatus];
 
   if (!formattedType) {
     res.status(400);
@@ -60,7 +61,7 @@ const getIncomingRequests = asyncHandler(async (req, res) => {
   if (status) filter.status = status;
 
   const requests = await Request.find(filter)
-    .populate("pet", "name image")
+    .populate("pet", "name image species location")
     .populate("requester", "username email");
 
   res.json(requests);
@@ -81,7 +82,7 @@ const getOutgoingRequests = asyncHandler(async (req, res) => {
 
 // PUT /api/requests/:id
 const updateRequestStatus = asyncHandler(async (req, res) => {
-  const { status } = req.body; // "accepted" or "rejected"
+  const { status } = req.body;
 
   if (!["accepted", "rejected"].includes(status)) {
     res.status(400);
@@ -103,7 +104,7 @@ const updateRequestStatus = asyncHandler(async (req, res) => {
   request.status = status;
   await request.save();
 
-  res.json({ message: `Request ${status}` });
+  res.json({ message: `Request ${status}`, updatedRequest: request });
 });
 
 // DELETE /api/requests/:id
@@ -115,13 +116,11 @@ const deleteRequest = asyncHandler(async (req, res) => {
     throw new Error("Request not found");
   }
 
-  // Only requester can delete the request
   if (request.requester.toString() !== req.user._id.toString()) {
     res.status(403);
     throw new Error("Not authorized to delete this request");
   }
 
-  // Only allow deletion if the request is still pending
   if (request.status !== "pending") {
     res.status(400);
     throw new Error("Only pending requests can be deleted");
@@ -130,6 +129,7 @@ const deleteRequest = asyncHandler(async (req, res) => {
   await request.remove();
   res.json({ message: "Pending request successfully removed" });
 });
+
 
 
 export {

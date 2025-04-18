@@ -4,9 +4,12 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { toast } from "react-toastify";
 import HeartIcon from "./HeartIcon";
+import { useSelector } from "react-redux";
 
 const ProductCard = ({ p }) => {
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+  const isUser = userInfo && !userInfo.isAdmin;
 
   const addToCartHandler = (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
@@ -79,13 +82,15 @@ const ProductCard = ({ p }) => {
                 />
               </svg>
             </Link>
-  
+
+          {isUser ? (
             <button
               className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition"
               onClick={() => addToCartHandler(p, 1)}
             >
               <AiOutlineShoppingCart size={22} className="text-pink-600" />
             </button>
+            ) : (<p ></p>)}
           </section>
         </div>
       </div>
