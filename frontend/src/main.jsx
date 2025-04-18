@@ -42,8 +42,7 @@ import PetDetails from "./pages/Pets/PetDetails.jsx";
 import EditPet from "./pages/Pets/EditPet.jsx"; 
 import PetList from "./pages/Pets/PetList.jsx"; 
 
-
-
+import OwnerDetails from "./pages/Pets/PetOwner.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -68,6 +67,7 @@ const router = createBrowserRouter(
         <Route path="/pet/:id" element={<PetDetails />} />
         <Route path="/pets/edit/:id" element={<EditPet />} />
         <Route path="/petlist" element={<PetList />} />
+        <Route path="/owner/:id" element={<OwnerDetails />} />
       </Route>
 
       <Route path="/admin" element={<AdminRoute />}>

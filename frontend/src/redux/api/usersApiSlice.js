@@ -1,5 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import { USERS_URL } from "../constants";
+import { PET_URL } from "../constants";
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -49,6 +50,29 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+
+    // Get public profile of pet owner
+    getPublicUserProfile: builder.query({
+      query: (id) => `/api/users/${id}/reviews`, // This should return username, email, reviews, etc.
+    }),
+
+   // Add review
+    createUserReview: builder.mutation({
+      query: ({ userId, rating, comment }) => ({
+        url: `/api/users/${userId}/reviews`,
+        method: "POST",
+        body: { rating, comment },
+      }),
+    }),
+
+    // Delete review
+    deleteUserReview: builder.mutation({
+      query: ({ userId, reviewId }) => ({
+        url: `/api/users/${userId}/reviews/${reviewId}`,
+        method: "DELETE",
+      }),
+    }),
+
     updateUser: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/${data.userId}`,
@@ -69,4 +93,7 @@ export const {
   useDeleteUserMutation,
   useUpdateUserMutation,
   useGetUserDetailsQuery,
+  useCreateUserReviewMutation,
+  useDeleteUserReviewMutation,
+  useGetPublicUserProfileQuery,
 } = userApiSlice;
