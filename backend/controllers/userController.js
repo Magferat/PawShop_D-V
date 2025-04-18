@@ -63,7 +63,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const logoutCurrentUser = asyncHandler(async (req, res) => {
   res.cookie("jwt", "", {
-    httyOnly: true,
+    httpOnly: true,
     expires: new Date(0),
   });
 
@@ -145,6 +145,95 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
+const getPublicUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select("username email reviews rating numReviews");
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+
+const addUserReview = asyncHandler(async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+      const alreadyReviewed = user.reviews.find(
+        (r) => r.user.toString() === req.user._id.toString()
+      );
+
+      if (alreadyReviewed) {
+        res.status(400);
+        throw new Error("You have already reviewed this user");
+      }
+
+      const review = {
+        name: req.user.username,
+        rating: Number(rating),
+        comment,
+        user: req.user._id,
+      };
+
+      user.reviews.push(review);
+      user.numReviews = user.reviews.length;
+
+      user.rating =
+        user.reviews.reduce((acc, item) => item.rating + acc, 0) /
+        user.reviews.length;
+
+      await user.save();
+      res.status(201).json({ message: "Review added" });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
+const deleteUserReview = asyncHandler(async (req, res) => {
+  const { id: userId, reviewId } = req.params;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const review = user.reviews.find(
+    (r) => r._id.toString() === reviewId && r.user.toString() === req.user._id.toString()
+  );
+
+  if (!review) {
+    res.status(404);
+    throw new Error("Review not found or not authorized to delete this review");
+  }
+
+  // Filter out the review
+  user.reviews = user.reviews.filter(
+    (r) => r._id.toString() !== reviewId
+  );
+
+  user.numReviews = user.reviews.length;
+
+  user.rating =
+    user.reviews.length > 0
+      ? user.reviews.reduce((acc, r) => acc + r.rating, 0) / user.reviews.length
+      : 0;
+
+  await user.save();
+  res.status(200).json({ message: "Review removed" });
+});
+
+
 const updateUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
@@ -177,4 +266,7 @@ export {
   deleteUserById,
   getUserById,
   updateUserById,
+  addUserReview,
+  getPublicUserProfile,
+  deleteUserReview,
 };

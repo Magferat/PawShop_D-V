@@ -36,7 +36,7 @@ const PetShop = () => {
   
         const isOwned = ownerId?.toString() === userInfo._id.toString();
         
-        console.log(`Pet: ${pet.name}, ownerId: ${ownerId}, userId: ${userInfo._id}, isOwned: ${isOwned}`);
+        // console.log(`Pet: ${pet.name}, ownerId: ${ownerId}, userId: ${userInfo._id}, isOwned: ${isOwned}`);
         
         return !isOwned;
       });

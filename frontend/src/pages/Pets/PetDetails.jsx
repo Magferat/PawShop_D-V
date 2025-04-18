@@ -21,8 +21,7 @@ const PetDetails = () => {
   const { id } = useParams();
   const { userInfo } = useSelector((state) => state.auth);
   const { data: pet, isLoading, error } = useGetPetByIdQuery(id);
-  console.log(userInfo);
-
+  
   return (
     <div className="max-w-5xl mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg">
       <Link to="/petshop" className="text-blue-500 font-medium hover:underline mb-4 block">
@@ -44,6 +43,7 @@ const PetDetails = () => {
           />
 
           <div className="flex-1">
+
             <h2 className="text-4xl font-extrabold text-gray-800 mb-2">{pet.name}</h2>
             <p className="text-gray-600 mb-4 italic">{pet.description}</p>
 
@@ -92,13 +92,13 @@ const PetDetails = () => {
                 {pet.vaccinated ? "Vaccinated" : "Not Vaccinated"},{" "}
                 {pet.neutered ? "Neutered" : "Not Neutered"}
               </p>
-
               <Link
-                to={`/owner/${userInfo._id}`}
+                to={`/owner/${pet.ownerId}`}
                 className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300"
               >
                 View Owner Profile
               </Link>
+
 
             </div>
           </div>

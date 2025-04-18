@@ -23,11 +23,11 @@ const petSchema = mongoose.Schema(
       required: true,
       ref: "User",
     }, 
-    receiverId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
+    // receiverId: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   required: false,
+    //   ref: "User",
+    // },
 
   },
   { timestamps: true }
