@@ -7,37 +7,33 @@ const createUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
+    res.status(400);
     throw new Error("Please fill all the inputs.");
   }
 
   const userExists = await User.findOne({ email });
-  if (userExists) res.status(400).send("User already exists");
+  if (userExists) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   const newUser = new User({ username, email, password: hashedPassword });
 
-  try {
-    await newUser.save();
-    createToken(res, newUser._id);
+  await newUser.save();
+  createToken(res, newUser._id);
 
-    res.status(201).json({
-      _id: newUser._id,
-      username: newUser.username,
-      email: newUser.email,
-      isAdmin: newUser.isAdmin,
-    });
-  } catch (error) {
-    res.status(400);
-    throw new Error("Invalid user data");
-  }
+  res.status(201).json({
+    _id: newUser._id,
+    username: newUser.username,
+    email: newUser.email,
+    isAdmin: newUser.isAdmin,
+  });
 });
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
-  console.log(email);
-  console.log(password);
 
   const existingUser = await User.findOne({ email });
 
@@ -50,15 +46,17 @@ const loginUser = asyncHandler(async (req, res) => {
     if (isPasswordValid) {
       createToken(res, existingUser._id);
 
-      res.status(201).json({
+      return res.status(200).json({
         _id: existingUser._id,
         username: existingUser.username,
         email: existingUser.email,
         isAdmin: existingUser.isAdmin,
       });
-      return;
     }
   }
+
+  res.status(401);
+  throw new Error("Invalid email or password");
 });
 
 const logoutCurrentUser = asyncHandler(async (req, res) => {
@@ -94,8 +92,16 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
+    if (req.body.email) {
+      const existingEmail = await User.findOne({ email: req.body.email });
+      if (existingEmail && existingEmail._id.toString() !== user._id.toString()) {
+        res.status(400);
+        throw new Error("Email already in use");
+      }
+      user.email = req.body.email;
+    }
+
     user.username = req.body.username || user.username;
-    user.email = req.body.email || user.email;
 
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
@@ -156,48 +162,40 @@ const getPublicUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-
 const addUserReview = asyncHandler(async (req, res) => {
-  try {
-    const { rating, comment } = req.body;
-    const user = await User.findById(req.params.id);
+  const { rating, comment } = req.body;
+  const user = await User.findById(req.params.id);
 
-    if (user) {
-      const alreadyReviewed = user.reviews.find(
-        (r) => r.user.toString() === req.user._id.toString()
-      );
+  if (user) {
+    const alreadyReviewed = user.reviews.find(
+      (r) => r.user.toString() === req.user._id.toString()
+    );
 
-      if (alreadyReviewed) {
-        res.status(400);
-        throw new Error("You have already reviewed this user");
-      }
-
-      const review = {
-        name: req.user.username,
-        rating: Number(rating),
-        comment,
-        user: req.user._id,
-      };
-
-      user.reviews.push(review);
-      user.numReviews = user.reviews.length;
-
-      user.rating =
-        user.reviews.reduce((acc, item) => item.rating + acc, 0) /
-        user.reviews.length;
-
-      await user.save();
-      res.status(201).json({ message: "Review added" });
-    } else {
-      res.status(404);
-      throw new Error("User not found");
+    if (alreadyReviewed) {
+      res.status(400);
+      throw new Error("You have already reviewed this user");
     }
-  } catch (error) {
-    console.error(error);
-    res.status(400).json({ message: error.message });
+
+    const review = {
+      name: req.user.username,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    };
+
+    user.reviews.push(review);
+    user.numReviews = user.reviews.length;
+
+    user.rating =
+      user.reviews.reduce((acc, item) => item.rating + acc, 0) / user.reviews.length;
+
+    await user.save();
+    res.status(201).json({ message: "Review added" });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
   }
 });
-
 
 const deleteUserReview = asyncHandler(async (req, res) => {
   const { id: userId, reviewId } = req.params;
@@ -217,11 +215,7 @@ const deleteUserReview = asyncHandler(async (req, res) => {
     throw new Error("Review not found or not authorized to delete this review");
   }
 
-  // Filter out the review
-  user.reviews = user.reviews.filter(
-    (r) => r._id.toString() !== reviewId
-  );
-
+  user.reviews = user.reviews.filter((r) => r._id.toString() !== reviewId);
   user.numReviews = user.reviews.length;
 
   user.rating =
@@ -233,14 +227,24 @@ const deleteUserReview = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Review removed" });
 });
 
-
 const updateUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
+    if (req.body.email) {
+      const existingEmail = await User.findOne({ email: req.body.email });
+      if (existingEmail && existingEmail._id.toString() !== user._id.toString()) {
+        res.status(400);
+        throw new Error("Email already in use");
+      }
+      user.email = req.body.email;
+    }
+
     user.username = req.body.username || user.username;
-    user.email = req.body.email || user.email;
-    user.isAdmin = Boolean(req.body.isAdmin);
+
+    if (req.body.isAdmin !== undefined) {
+      user.isAdmin = req.body.isAdmin;
+    }
 
     const updatedUser = await user.save();
 
