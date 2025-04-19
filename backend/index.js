@@ -35,9 +35,6 @@ app.use("/api/pets", petRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/requests", petRequestRoutes);
 
-app.get("/api/config/paypal", (req, res) => {
-  res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
-});
 
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname + "/uploads")));

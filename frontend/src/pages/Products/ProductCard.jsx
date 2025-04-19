@@ -62,6 +62,7 @@ const ProductCard = ({ p }) => {
   
           {/* CTA & Cart */}
           <section className="flex justify-between items-center">
+            {isUser ? (
             <Link
               to={`/product/${p._id}`}
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 rounded-full transition"
@@ -82,6 +83,28 @@ const ProductCard = ({ p }) => {
                 />
               </svg>
             </Link>
+            ) : (
+              <Link
+              to={`/login`}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 rounded-full transition"
+            >
+              Read More
+              <svg
+                className="w-3.5 h-3.5 ml-2"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
+              </svg>
+            </Link>
+            )}
 
           {isUser ? (
             <button
