@@ -8,7 +8,7 @@ import {
   updateCurrentUserProfile,
   deleteUserById,
   getUserById,
-  updateUserById,
+  // updateUserById,
   addUserReview,
   getPublicUserProfile,
   deleteUserReview
@@ -37,7 +37,7 @@ router
   .route("/:id")
   .delete(authenticate, authorizeAdmin, deleteUserById)
   .get(authenticate, authorizeAdmin, getUserById)             
-  .put(authenticate, authorizeAdmin, updateUserById);
+  // .put(authenticate, authorizeAdmin, updateUserById);
 
 
 //viewing pet owner profile and reviewing them

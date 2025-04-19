@@ -227,38 +227,38 @@ const deleteUserReview = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Review removed" });
 });
 
-const updateUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+// const updateUserById = asyncHandler(async (req, res) => {
+//   const user = await User.findById(req.params.id);
 
-  if (user) {
-    if (req.body.email) {
-      const existingEmail = await User.findOne({ email: req.body.email });
-      if (existingEmail && existingEmail._id.toString() !== user._id.toString()) {
-        res.status(400);
-        throw new Error("Email already in use");
-      }
-      user.email = req.body.email;
-    }
+//   if (user) {
+//     if (req.body.email) {
+//       const existingEmail = await User.findOne({ email: req.body.email });
+//       if (existingEmail && existingEmail._id.toString() !== user._id.toString()) {
+//         res.status(400);
+//         throw new Error("Email already in use");
+//       }
+//       user.email = req.body.email;
+//     }
 
-    user.username = req.body.username || user.username;
+//     user.username = req.body.username || user.username;
 
-    if (req.body.isAdmin !== undefined) {
-      user.isAdmin = req.body.isAdmin;
-    }
+//     if (req.body.isAdmin !== undefined) {
+//       user.isAdmin = req.body.isAdmin;
+//     }
 
-    const updatedUser = await user.save();
+//     const updatedUser = await user.save();
 
-    res.json({
-      _id: updatedUser._id,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-    });
-  } else {
-    res.status(404);
-    throw new Error("User not found");
-  }
-});
+//     res.json({
+//       _id: updatedUser._id,
+//       username: updatedUser.username,
+//       email: updatedUser.email,
+//       isAdmin: updatedUser.isAdmin,
+//     });
+//   } else {
+//     res.status(404);
+//     throw new Error("User not found");
+//   }
+// });
 
 export {
   createUser,
@@ -269,7 +269,7 @@ export {
   updateCurrentUserProfile,
   deleteUserById,
   getUserById,
-  updateUserById,
+  // updateUserById,
   addUserReview,
   getPublicUserProfile,
   deleteUserReview,
