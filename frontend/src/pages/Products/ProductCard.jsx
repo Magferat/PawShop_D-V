@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../redux/features/cart/cartSlice";
 import { toast } from "react-toastify";
-import HeartIcon from "./HeartIcon";
 import { useSelector } from "react-redux";
 
 const ProductCard = ({ p }) => {
@@ -12,11 +10,6 @@ const ProductCard = ({ p }) => {
   const isUser = userInfo && !userInfo.isAdmin;
 
   const addToCartHandler = (product, qty) => {
-    dispatch(addToCart({ ...product, qty }));
-    toast.success("Item added successfully", {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 2000,
-    });
   };
 
   return (
@@ -37,7 +30,6 @@ const ProductCard = ({ p }) => {
   
           {/* Wishlist Icon */}
           <div className="absolute top-2 right-2">
-            <HeartIcon product={p} />
           </div>
         </section>
   

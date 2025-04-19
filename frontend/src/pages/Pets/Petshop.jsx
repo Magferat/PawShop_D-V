@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetFilteredPetsQuery } from "../redux/api/petApiSlice";
-import { setPets } from "../redux/features/petshop/petshopSlice";
-import Loader from "../components/Loader";
-import PetCard from "./Pets/PetCard";
+import { useGetFilteredPetsQuery } from "../../redux/api/petApiSlice";
+import { setPets } from "../../redux/features/petshop/petshopSlice";
+import Loader from "../../components/Loader";
+import PetCard from "./PetCard";
 
 const PetShop = () => {
   const dispatch = useDispatch();

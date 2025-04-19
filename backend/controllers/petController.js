@@ -17,10 +17,9 @@ const addPet = asyncHandler(async (req, res) => {
       description,
       vaccinated,
       neutered,
-      microchipped,
       // image,
       location,
-    } = req.fields;
+    } = req.fields;     //these fields are coming from the frontend using formidable
 
     // const image = req.files?.image;
 
@@ -49,12 +48,8 @@ const addPet = asyncHandler(async (req, res) => {
     const pet = new Pet({
       ...req.fields,
       // image: image?.filepath || "",
-      ownerId: req.user._id, // Assign the ownerId from the logged-in user
+      ownerId: req.user._id, // Assign the ownerId from the logged-in user. It is coming from authenticate middleware
     });
-
-
-
-
 
     await pet.save();
     res.json(pet);
@@ -70,9 +65,6 @@ const updatePetDetails = asyncHandler(async (req, res) => {
     
     const pet = await Pet.findById(req.params.id);
     
-    console.log("Request fields:", req.fields); // ✅ Debug log
-    
-
     // Check if the pet exists
     if (!pet) {
       return res.status(404).json({ error: "Pet not found" });
@@ -86,7 +78,7 @@ const updatePetDetails = asyncHandler(async (req, res) => {
     const updatedPet = await Pet.findByIdAndUpdate(
       req.params.id,
       { ...req.fields },
-      { new: true }
+      { new: true }     // Return the updated pet immediately
     );
 
 
@@ -120,42 +112,6 @@ const removePet = asyncHandler(async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-
-// Fetch all pets (pagination and search)
-// const fetchPets = asyncHandler(async (req, res) => {
-//   try {
-//     const pageSize = 6;
-
-//     const keyword = req.query.keyword
-//       ? {
-//           $or: [
-//             { name: { $regex: req.query.keyword, $options: "i" } },
-//             { species: { $regex: req.query.keyword, $options: "i" } },
-//             { breed: { $regex: req.query.keyword, $options: "i" } },
-//             { gender: { $regex: req.query.keyword, $options: "i" } },
-//             { size: { $regex: req.query.keyword, $options: "i" } },
-//             { color: { $regex: req.query.keyword, $options: "i" } },
-//             { status: { $regex: req.query.keyword, $options: "i" } },
-//             { description: { $regex: req.query.keyword, $options: "i" } },
-//             { location: { $regex: req.query.keyword, $options: "i" } },
-//           ],
-//         }
-//       : {};
-
-//     const count = await Pet.countDocuments({ ...keyword });
-//     const pets = await Pet.find({ ...keyword }).limit(pageSize);
-
-//     res.json({
-//       pets,
-//       page: 1,
-//       pages: Math.ceil(count / pageSize),
-//       hasMore: false,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Server Error" });
-//   }
-// });
 
 // Fetch a specific pet by ID
 const fetchPetById = asyncHandler(async (req, res) => {
@@ -207,12 +163,12 @@ const filterPets = asyncHandler(async (req, res) => {
     let query = {};
 
     if (checked.length > 0) {
-      query.status = { $in: checked }; // filter by selected species
+      query.status = { $in: checked }; // filter by selected status. $in is a MongoDB operator that checks if the status field matches any value in the array.
     }
 
     if (search?.trim()) {
       const searchRegex = new RegExp(search, 'i'); // case-insensitive regex
-      query.$or = [
+      query.$or = [                                // $or operator to search in multiple fields
         { name: searchRegex },
         { species: searchRegex },
         { status: searchRegex },
@@ -229,12 +185,10 @@ const filterPets = asyncHandler(async (req, res) => {
 });
 
 
-
 export {
   addPet,
   updatePetDetails,
   removePet,
-  // fetchPets,
   fetchPetById,
   fetchAllPets,
   fetchNewPets,

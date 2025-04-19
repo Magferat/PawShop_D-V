@@ -53,7 +53,7 @@ const AddPet = () => {
       petData.append("location", location);
 
       await createPet(petData).unwrap();
-      navigate("/petshop");
+      navigate("/petlist");
     } catch (err) {
       console.error("Failed to create pet", err);
     }
@@ -133,14 +133,11 @@ const AddPet = () => {
     </div>
 
     {/* Image Preview */}
-    {imageUrl && (
+    {imageUrl? (
       <div className="text-center mb-4">
         <img src={imageUrl} alt="Pet" className="block mx-auto max-h-[200px] rounded-lg shadow-md border border-yellow-300" />
       </div>
-    )}
-
-    {/* Upload */}
-    <div>
+    ) : (    <div>
       <label htmlFor="imageUpload" className="block text-gray-700 font-medium mb-2">
         🖼️ Upload Pet Photo
       </label>
@@ -148,7 +145,9 @@ const AddPet = () => {
         {image ? image.name : "Click here to choose a cute pic!"}
       </label>
       <input id="imageUpload" type="file" name="image" accept="image/*" onChange={uploadFileHandler} className="hidden" />
-    </div>
+    </div>)} 
+
+
 
     <textarea name="description" placeholder="Add a friendly description..." onChange={(e) => setDescription(e.target.value)} className="w-full px-4 py-3 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400" />
 

@@ -4,14 +4,12 @@ import "react-toastify/dist/ReactToastify.css";
 
 import TopNavbar from "./pages/Auth/TopNavbar";
 
-
+//root layout component for all routes
 const App = () => {
   return (
     <>
-      <ToastContainer />
-      {/* <Navigation />
-      <main className="py-3">
-        <Outlet /> */}
+    {/* shows notifications */}
+    <ToastContainer />
 
     <TopNavbar />
       <main className="pt-16">

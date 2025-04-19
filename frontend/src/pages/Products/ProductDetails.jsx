@@ -16,10 +16,10 @@ import {
   FaStore,
 } from "react-icons/fa";
 import moment from "moment";
-import HeartIcon from "./HeartIcon";
+// import HeartIcon from "./HeartIcon";
 import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
-import { addToCart } from "../../redux/features/cart/cartSlice";
+// import { addToCart } from "../../redux/features/cart/cartSlice";
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
@@ -59,7 +59,7 @@ const ProductDetails = () => {
   };
 
   const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty }));
+    
     navigate("/cart");
   };
 
@@ -90,7 +90,7 @@ const ProductDetails = () => {
                 className="w-full xl:w-[50rem] lg:w-[45rem] md:w-[30rem] sm:w-[20rem] mr-[2rem]"
               />
 
-              <HeartIcon product={product} />
+             
             </div>
 
             <div className="flex flex-col justify-between">

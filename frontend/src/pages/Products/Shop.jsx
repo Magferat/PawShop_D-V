@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
-import { useFetchCategoriesQuery } from "../redux/api/categoryApiSlice";
+import { useGetFilteredProductsQuery } from "../../redux/api/productApiSlice";
+import { useFetchCategoriesQuery } from "../../redux/api/categoryApiSlice";
 
 import {
   setCategories,
   setProducts,
   setChecked,
-} from "../redux/features/shop/shopSlice";
+} from "../../redux/features/shop/shopSlice";
 
-import Loader from "../components/Loader";
-import ProductCard from "./Products/ProductCard";
+import Loader from "../../components/Loader";
+import ProductCard from "./ProductCard";
 
 const Shop = () => {
   const dispatch = useDispatch();

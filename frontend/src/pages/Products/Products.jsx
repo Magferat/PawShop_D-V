@@ -19,7 +19,7 @@ import {
 } from "react-icons/fa";
 import moment from "moment";
 import ProductTabs from "./Tabs";
-import HeartIcon from "./HeartIcon";
+
 
 const Product = () => {
   const { id: productId } = useParams();
@@ -88,7 +88,7 @@ const Product = () => {
                 alt={product.name}
                 className="w-full  xl:w-[50rem] lg:w-[45rem] md:w-[30rem] sm:w-[20rem] mr-[2rem]"
               />
-              <HeartIcon product={product} />
+             
             </div>
             <div className="flex flex-col justify-between">
               <h2 className="text-2xl font-semibold">{product.name}</h2>

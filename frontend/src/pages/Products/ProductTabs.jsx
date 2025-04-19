@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Ratings from "./Ratings";
 import { useGetTopProductsQuery } from "../../redux/api/productApiSlice";
-import SmallProduct from "./SmallProduct";
+// import SmallProduct from "./SmallProduct";
 import Loader from "../../components/Loader";
 
 const ProductTabs = ({
@@ -123,7 +123,7 @@ const ProductTabs = ({
               {product.reviews.map((review) => (
                 <div
                   key={review._id}
-                  className="bg-[#1A1A1A] p-4 rounded-lg xl:ml-[2rem] sm:ml-[0rem] xl:w-[50rem] sm:w-[24rem] mb-5"
+                  className=" p-4 rounded-lg xl:ml-[2rem] sm:ml-[0rem] xl:w-[50rem] sm:w-[24rem] mb-5"
                 >
                   <div className="flex justify-between">
                     <strong className="text-[#B0B0B0]">{review.name}</strong>
@@ -149,7 +149,7 @@ const ProductTabs = ({
             ) : (
               data.map((product) => (
                 <div key={product._id}>
-                  <SmallProduct product={product} />
+                  
                 </div>
               ))
             )}

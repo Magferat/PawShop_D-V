@@ -6,7 +6,7 @@ import { logout } from "../../redux/features/auth/authSlice";
 
 const TopNavbar = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  const { cartItems } = useSelector((state) => state.cart);
+  // const { cartItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
   const [logoutApiCall] = useLogoutMutation();
@@ -33,7 +33,7 @@ const TopNavbar = () => {
         {/* Navigation Links */}
         <ul className="flex items-center space-x-6 text-gray-700 font-medium">
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/productshop">Home</Link>
           </li>
 
           {/* Products Dropdown */}
@@ -83,6 +83,7 @@ const TopNavbar = () => {
                 </>
               )}
               {userInfo && !userInfo.isAdmin && (
+                <>
               <li>
                   <Link
                   to="/my-coupons"
@@ -91,6 +92,12 @@ const TopNavbar = () => {
                   My Coupons
                   </Link>
               </li>
+              <li>
+                    <Link to="/couponshop" className="block px-4 py-2 hover:bg-gray-100">
+                      Shop Coupons
+                    </Link>
+                  </li>
+              </>
            
                 )}
             </ul>
@@ -150,7 +157,7 @@ const TopNavbar = () => {
 
             {userInfo && !userInfo.isAdmin && (
             <li>
-              <Link to="/cart">Cart ({cartItems.reduce((a, c) => a + c.qty, 0)})</Link>
+              <Link to="/cart">Cart </Link>
             </li>
           )}
 

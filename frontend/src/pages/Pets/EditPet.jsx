@@ -159,27 +159,27 @@ const EditPet = () => {
 
         <div>
           <label className="block mb-1">Name</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} className="input-box" />
+          <input value={name} onChange={(e) => setName(e.target.value)} className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400" />
         </div>
 
         <div>
           <label className="block mb-1">Species</label>
-          <input value={species} onChange={(e) => setSpecies(e.target.value)} className="input-box" />
+          <input value={species} onChange={(e) => setSpecies(e.target.value)} className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400" />
         </div>
 
         <div>
           <label className="block mb-1">Breed</label>
-          <input value={breed} onChange={(e) => setBreed(e.target.value)} className="input-box" />
+          <input value={breed} onChange={(e) => setBreed(e.target.value)} className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400" />
         </div>
 
         <div>
           <label className="block mb-1">Age</label>
-          <input value={age} onChange={(e) => setAge(e.target.value)} className="input-box" />
+          <input value={age} onChange={(e) => setAge(e.target.value)} className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400" />
         </div>
 
         <div>
           <label className="block mb-1">Gender</label>
-          <select value={gender} onChange={(e) => setGender(e.target.value)} className="text-black input-box">
+          <select value={gender} onChange={(e) => setGender(e.target.value)} className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
@@ -189,7 +189,7 @@ const EditPet = () => {
 
         <div>
           <label className="block mb-1">Size</label>
-          <select value={size} onChange={(e) => setSize(e.target.value)} className="text-black input-box">
+          <select value={size} onChange={(e) => setSize(e.target.value)} className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
             <option value="">Select Size</option>
             <option value="Small">Small</option>
             <option value="Medium">Medium</option>
@@ -199,12 +199,12 @@ const EditPet = () => {
 
         <div>
           <label className="block mb-1">Color</label>
-          <input value={color} onChange={(e) => setColor(e.target.value)} className="input-box" />
+          <input value={color} onChange={(e) => setColor(e.target.value)} className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400" />
         </div>
 
         <div>
           <label className="block mb-1">Status</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)} className="text-black input-box">
+          <select value={status} onChange={(e) => setStatus(e.target.value)} className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400">
             <option value="">Select Status</option>
             <option value="For Sale">For Sale</option>
             <option value="Adoptable">Adoptable</option>
@@ -218,7 +218,7 @@ const EditPet = () => {
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="input-box"
+            className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
             disabled={status === "Adoptable" || status === "Foster"}
           />
         </div>
@@ -228,19 +228,19 @@ const EditPet = () => {
           <input
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
-            className="input-box"
+            className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
             disabled={status === "For Sale" || status === "Adoptable"}
           />
         </div>
 
         <div>
           <label className="block mb-1">Location</label>
-          <input value={location} onChange={(e) => setLocation(e.target.value)} className="input-box" />
+          <input value={location} onChange={(e) => setLocation(e.target.value)} className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400" />
         </div>
 
         <div>
           <label className="block mb-1">Description</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="input-box" />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="text-black w-full px-4 py-2 border border-yellow-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400" />
         </div>
 
         <div className="flex gap-4 items-center">
