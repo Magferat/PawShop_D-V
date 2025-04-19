@@ -33,7 +33,7 @@ const TopNavbar = () => {
         {/* Navigation Links */}
         <ul className="flex items-center space-x-6 text-gray-700 font-medium">
           <li>
-            <Link to="/productshop">Home</Link>
+            <Link to="/">Home</Link>
           </li>
 
           {/* Products Dropdown */}
