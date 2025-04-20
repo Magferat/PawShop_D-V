@@ -110,7 +110,7 @@ const Login = () => {
         </div>
 
         <img
-          src="https://images.unsplash.com/photo-1583337130417-3346a1f83b25?auto=format&fit=crop&w=987&q=80"
+          src="https://patch.com/img/cdn20/shutterstock/22871539/20210317/120803/styles/patch_image/public/shutterstock-260124632___17114947878.jpg"
           alt="Cute pet shop"
           className="hidden md:block md:w-[30rem] object-cover"
         />

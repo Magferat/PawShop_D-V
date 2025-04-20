@@ -24,9 +24,19 @@ const TopNavbar = () => {
     <nav className="bg-white shadow-md fixed top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
-        <div>
+        {/* <div>
           <Link to="/" className="text-xl font-semibold text-gray-800">
-            PetStore
+            PawShop
+          </Link>
+        </div> */}
+        <div className="flex items-center space-x-4">
+          <img 
+            src="../uploads/logo.png" 
+            alt="PawStore Logo" 
+            className="h-10 w-15 object-cover" 
+          />
+          <Link to="/" className="text-3xl font-bold text-yellow-800 tracking-wide">
+            PawShop
           </Link>
         </div>
 

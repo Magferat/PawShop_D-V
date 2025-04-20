@@ -22,7 +22,7 @@ const HomePage = () => {
           </div>
         </div>
         <img
-          src="https://www.nicepng.com/png/detail/362-3623221_pet-store-clipart-clip-art-pet-store.png"
+          src="https://thumbs.dreamstime.com/b/pet-store-visit-9547660.jpg"
           alt="Cute pets"
           className="w-full md:w-1/2 rounded-2xl mt-12 md:mt-0 shadow-2xl"
         />
