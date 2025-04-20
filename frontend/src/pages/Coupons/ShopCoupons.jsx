@@ -22,40 +22,48 @@ const ShopCoupons = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-black text-3xl font-bold mb-6 text-center">Available Coupons</h1>
-
+      <h1 className="text-3xl font-bold mb-8 text-center text-pink-700">
+        Available Coupons
+      </h1>
+  
       {isLoading ? (
-        <p>Loading coupons...</p>
+        <p className="text-center text-gray-600">Loading coupons...</p>
       ) : error ? (
-        <p className="text-red-600">{error?.data?.message || "Error fetching coupons"}</p>
+        <p className="text-center text-red-600">
+          {error?.data?.message || "Error fetching coupons"}
+        </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {coupons.map((coupon) => (
             <div
               key={coupon._id}
-              className="text-black border rounded-lg p-4 shadow-sm bg-white hover:shadow-md transition"
+              className="bg-yellow-50 border border-yellow-200 rounded-xl p-5 shadow-sm hover:shadow-md transition"
             >
-              <h2 className="text-black text-xl font-semibold mb-2">{coupon.templateCode}</h2>
-              <p className="mb-1">
-                <strong className="text-black">Discount:</strong> {coupon.discountValue}%
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                {coupon.templateCode}
+              </h2>
+              <p className="text-gray-700 mb-1">
+                <strong>Discount:</strong> {coupon.discountValue}%
               </p>
-              <p className="text-black mb-1">
+              <p className="text-gray-700 mb-1">
                 <strong>Points Required:</strong> {coupon.pointCost}
               </p>
-              <p className="text-black mb-2">
+              <p className="text-gray-700 mb-3">
                 <strong>Description:</strong> {coupon.description}
               </p>
-
+  
               {isUser ? (
                 <button
                   onClick={() => handleRedeem(coupon._id)}
                   disabled={assigning}
-                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                  className="bg-green-500 hover:bg-green-600 text-white font-medium px-4 py-2 rounded-full transition"
                 >
                   {assigning ? "Redeeming..." : "Redeem Coupon"}
                 </button>
               ) : (
-                <p className="text-black text-sm text-gray-500 italic">Admins cannot redeem coupons</p>
+                <p className="text-sm text-gray-500 italic">
+                  Admins cannot redeem coupons
+                </p>
               )}
             </div>
           ))}
@@ -63,6 +71,7 @@ const ShopCoupons = () => {
       )}
     </div>
   );
+  
 };
 
 export default ShopCoupons;

@@ -65,85 +65,82 @@ const ProductDetails = () => {
 
   return (
     <>
-      <div>
+      <div className="max-w-6xl mx-auto px-4 py-6">
         <Link
           to="/"
-          className="text-white font-semibold hover:underline ml-[10rem]"
+          className="text-pink-700 font-semibold hover:underline mb-4 inline-block"
         >
-          Go Back
+          &larr; Go Back
         </Link>
-      </div>
-
-      {isLoading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">
-          {error?.data?.message || error.message}
-        </Message>
-      ) : (
-        <>
-          <div className="flex flex-wrap relative items-between mt-[2rem] ml-[10rem]">
-            <div>
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full xl:w-[50rem] lg:w-[45rem] md:w-[30rem] sm:w-[20rem] mr-[2rem]"
-              />
-
-             
-            </div>
-
-            <div className="flex flex-col justify-between">
-              <h2 className="text-2xl font-semibold">{product.name}</h2>
-              <p className="my-4 xl:w-[35rem] lg:w-[35rem] md:w-[30rem] text-[#B0B0B0]">
-                {product.description}
-              </p>
-
-              <p className="text-5xl my-4 font-extrabold">$ {product.price}</p>
-
-              <div className="flex items-center justify-between w-[20rem]">
-                <div className="one">
-                  <h1 className="flex items-center mb-6">
-                    <FaStore className="mr-2 text-white" /> Brand:{" "}
-                    {product.brand}
-                  </h1>
-                  <h1 className="flex items-center mb-6 w-[20rem]">
-                    <FaClock className="mr-2 text-white" /> Added:{" "}
-                    {moment(product.createAt).fromNow()}
-                  </h1>
-                  <h1 className="flex items-center mb-6">
-                    <FaStar className="mr-2 text-white" /> Reviews:{" "}
-                    {product.numReviews}
-                  </h1>
-                </div>
-
-                <div className="two">
-                  <h1 className="flex items-center mb-6">
-                    <FaStar className="mr-2 text-white" /> Ratings: {rating}
-                  </h1>
-                  <h1 className="flex items-center mb-6">
-                    <FaShoppingCart className="mr-2 text-white" /> Quantity:{" "}
-                    {product.quantity}
-                  </h1>
-                  <h1 className="flex items-center mb-6 w-[10rem]">
-                    <FaBox className="mr-2 text-white" /> In Stock:{" "}
-                    {product.countInStock}
-                  </h1>
-                </div>
-              </div>
-
-              <div className="flex justify-between flex-wrap">
-                <Ratings
-                  value={product.rating}
-                  text={`${product.numReviews} reviews`}
+  
+        {isLoading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant="danger">
+            {error?.data?.message || error.message}
+          </Message>
+        ) : (
+          <>
+            <div className="flex flex-col lg:flex-row gap-10">
+              {/* Image */}
+              <div className="flex-shrink-0 w-full lg:w-[400px]">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="rounded-xl shadow-md w-full h-[300px] object-cover"
                 />
-
-                {product.countInStock > 0 && (
-                  <div>
+              </div>
+  
+              {/* Product Info */}
+              <div className="flex-1 flex flex-col justify-between text-gray-800">
+                <div>
+                  <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
+                  <p className="text-gray-500 mb-4">{product.description}</p>
+  
+                  <p className="text-4xl font-extrabold text-green-700 mb-6">
+                    ${product.price}
+                  </p>
+  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 text-sm mb-6">
+                    <div>
+                      <p className="flex items-center mb-3">
+                        <FaStore className="mr-2 text-pink-600" /> Brand: {product.brand}
+                      </p>
+                      <p className="flex items-center mb-3">
+                        <FaClock className="mr-2 text-green-500" /> Added:{" "}
+                        {moment(product.createAt).fromNow()}
+                      </p>
+                      <p className="flex items-center mb-3">
+                        <FaStar className="mr-2 text-yellow-500" /> Reviews: {product.numReviews}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="flex items-center mb-3">
+                        <FaStar className="mr-2 text-yellow-500" /> Rating: {rating}
+                      </p>
+                      <p className="flex items-center mb-3">
+                        <FaShoppingCart className="mr-2 text-pink-500" /> Quantity: {product.quantity}
+                      </p>
+                      <p className="flex items-center mb-3">
+                        <FaBox className="mr-2 text-green-600" /> In Stock:{" "}
+                        {product.countInStock}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+  
+                {/* Quantity & Button */}
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <Ratings
+                    value={product.rating}
+                    text={`${product.numReviews} reviews`}
+                  />
+  
+                  {product.countInStock > 0 && (
                     <select
                       value={qty}
                       onChange={(e) => setQty(e.target.value)}
-                      className="p-2 w-[6rem] rounded-lg text-black"
+                      className="p-2 w-[6rem] border border-gray-300 rounded-lg text-gray-700"
                     >
                       {[...Array(product.countInStock).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
@@ -151,22 +148,21 @@ const ProductDetails = () => {
                         </option>
                       ))}
                     </select>
-                  </div>
-                )}
-              </div>
-
-              <div className="btn-container">
-                <button
-                  onClick={addToCartHandler}
-                  disabled={product.countInStock === 0}
-                  className="bg-pink-600 text-white py-2 px-4 rounded-lg mt-4 md:mt-0"
-                >
-                  Add To Cart
-                </button>
+                  )}
+  
+                  <button
+                    onClick={addToCartHandler}
+                    disabled={product.countInStock === 0}
+                    className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-lg transition"
+                  >
+                    Add To Cart
+                  </button>
+                </div>
               </div>
             </div>
-
-            <div className="mt-[5rem] container flex flex-wrap items-start justify-between ml-[10rem]">
+  
+            {/* Tabs Section */}
+            <div className="mt-12">
               <ProductTabs
                 loadingProductReview={loadingProductReview}
                 userInfo={userInfo}
@@ -178,11 +174,12 @@ const ProductDetails = () => {
                 product={product}
               />
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </>
   );
+  
 };
 
 export default ProductDetails;

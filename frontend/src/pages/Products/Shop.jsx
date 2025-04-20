@@ -75,44 +75,44 @@ const Shop = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-10">
       <div className="flex flex-col md:flex-row gap-6">
         {/* Sidebar */}
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 w-full md:w-[260px] sticky top-4 h-fit">
-          <h2 className="text-lg font-semibold mb-4 text-center text-gray-700">
+        <aside className="bg-yellow-50 border border-yellow-200 rounded-2xl shadow p-6 w-full md:w-[260px] sticky top-4 h-fit">
+          <h2 className="text-lg font-bold mb-4 text-center text-green-700">
             Filter by Categories
           </h2>
           {categories?.map((c) => (
             <div key={c._id} className="mb-3">
-              <label className="flex items-center space-x-2 text-gray-600">
+              <label className="flex items-center space-x-2 text-gray-700">
                 <input
                   type="checkbox"
                   onChange={(e) => handleCheck(e.target.checked, c._id)}
-                  className="w-4 h-4 text-pink-500 focus:ring-pink-400"
+                  className="w-4 h-4 text-green-500 focus:ring-green-300 rounded"
                 />
                 <span className="text-sm">{c.name}</span>
               </label>
             </div>
           ))}
   
-          <h2 className="text-lg font-semibold mb-4 mt-6 text-center text-gray-700">
+          <h2 className="text-lg font-bold mb-4 mt-6 text-center text-green-700">
             Filter by Brands
           </h2>
           {uniqueBrands?.map((brand) => (
             <div key={brand} className="mb-3">
-              <label className="flex items-center space-x-2 text-gray-600">
+              <label className="flex items-center space-x-2 text-gray-700">
                 <input
                   type="radio"
                   name="brand"
                   onChange={() => handleBrandClick(brand)}
-                  className="w-4 h-4 text-pink-500 focus:ring-pink-400"
+                  className="w-4 h-4 text-green-500 focus:ring-green-300 rounded"
                 />
                 <span className="text-sm">{brand}</span>
               </label>
             </div>
           ))}
   
-          <h2 className="text-lg font-semibold mb-4 mt-6 text-center text-gray-700">
+          <h2 className="text-lg font-bold mb-4 mt-6 text-center text-green-700">
             Filter by Price
           </h2>
           <input
@@ -120,20 +120,20 @@ const Shop = () => {
             placeholder="Enter Price"
             value={priceFilter}
             onChange={handlePriceChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-300 focus:outline-none"
+            className="w-full px-3 py-2 border border-yellow-300 rounded-lg text-sm focus:ring-2 focus:ring-green-300 focus:outline-none bg-white"
           />
   
           <button
-            className="w-full mt-6 bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition"
+            className="w-full mt-6 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition"
             onClick={() => window.location.reload()}
           >
             Reset Filters
           </button>
-        </div>
+        </aside>
   
         {/* Products */}
-        <div className="flex-1">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <main className="flex-1">
+          <h2 className="text-2xl font-bold text-green-700 mb-6">
             {products?.length} Products
           </h2>
   
@@ -148,10 +148,10 @@ const Shop = () => {
               ))
             )}
           </div>
-        </div>
+        </main>
       </div>
     </div>
-  );
+  );  
   
 
 };
