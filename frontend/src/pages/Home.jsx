@@ -1,11 +1,21 @@
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+
 
 const HomePage = () => {
+  const { userInfo } = useSelector((state) => state.auth);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-yellow-50 to-pink-100 flex flex-col">
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-between px-6 py-20 max-w-6xl mx-auto">
         <div className="md:w-1/2 text-center md:text-left space-y-6">
+        {userInfo && (
+          <h2 className="text-5xl md:text-6xl font-extrabold text-green-700 leading-tight">
+            Hello, {userInfo.username}!
+          </h2>
+        )}
           <h1 className="text-5xl md:text-6xl font-extrabold text-green-700 leading-tight">
             Welcome to PawShop
           </h1>

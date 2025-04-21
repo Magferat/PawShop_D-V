@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { apiSlice } from "../../api/apiSlice";
 
 const initialState = {
   userInfo: localStorage.getItem("userInfo")
@@ -25,5 +26,11 @@ const authSlice = createSlice({
 });
 
 export const { setCredentials, logout } = authSlice.actions;
+
+// ✅ Thunk to log out and reset API state
+export const logoutUser = () => (dispatch) => {
+  dispatch(logout());
+  dispatch(apiSlice.util.resetApiState());
+};
 
 export default authSlice.reducer;

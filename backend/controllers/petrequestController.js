@@ -2,12 +2,7 @@ import asyncHandler from "express-async-handler";
 import Pet from "../models/petModel.js"; 
 import Request from "../models/petrequestModel.js";
 
-// Mapping lowercase pet status to request type
-const typeMap = {
-  forsale: "For Sale",
-  adoption: "Adoptable",
-  foster: "Foster",
-};
+
 
 // POST /api/requests/:id
 const createRequest = asyncHandler(async (req, res) => {
@@ -34,10 +29,10 @@ const createRequest = asyncHandler(async (req, res) => {
     throw new Error("Request already sent for this pet");
   }
 
-  const normalizedStatus = pet.status?.toLowerCase().trim();
-  const formattedType = typeMap[normalizedStatus];
+  const validTypes = ['For Sale', 'Adoptable', 'Foster'];
+  const requestType = pet.status;
 
-  if (!formattedType) {
+  if (!validTypes.includes(requestType)) {
     res.status(400);
     throw new Error("Invalid request type from pet");
   }
@@ -46,13 +41,14 @@ const createRequest = asyncHandler(async (req, res) => {
     pet: pet._id,
     owner: pet.ownerId._id,
     requester: req.user._id,
-    type: formattedType,
+    type: requestType,
     status: "pending",
   });
 
   const created = await request.save();
   res.status(201).json(created);
 });
+
 
 // GET /api/requests/incoming?status=pending
 const getIncomingRequests = asyncHandler(async (req, res) => {
@@ -107,10 +103,11 @@ const updateRequestStatus = asyncHandler(async (req, res) => {
   res.json({ message: `Request ${status}`, updatedRequest: request });
 });
 
-// DELETE /api/requests/:id
 const deleteRequest = asyncHandler(async (req, res) => {
-  const request = await Request.findById(req.params.id);
+  const requestId = req.params.id; // ✅ From query instead of body
 
+
+  const request = await Request.findById(requestId);
   if (!request) {
     res.status(404);
     throw new Error("Request not found");
@@ -126,9 +123,11 @@ const deleteRequest = asyncHandler(async (req, res) => {
     throw new Error("Only pending requests can be deleted");
   }
 
-  await request.remove();
+  await request.deleteOne();
   res.json({ message: "Pending request successfully removed" });
 });
+
+
 
 
 
