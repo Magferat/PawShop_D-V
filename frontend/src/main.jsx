@@ -44,6 +44,11 @@ import AllCouponsAdmin from "./pages/Coupons/AllCoupons.jsx";
 import OutgoingRequests from "./pages/User/OutgoingRequests.jsx";
 import IncomingRequests from "./pages/User/IncomingRequests.jsx";
 
+import Cart from "./pages/Cart/cart.jsx";
+import Shipping from "./pages/Cart/Shipping.jsx";
+import PlaceOrder from "./pages/Cart/PlaceOrder.jsx";
+import MyOrders from "./pages/Cart/MyOrders.jsx";
+import OrderDetails from "./pages/Cart/OrderDetails.jsx";
 
 //These are all frontend routes
 const router = createBrowserRouter(
@@ -69,6 +74,11 @@ const router = createBrowserRouter(
         <Route path="/my-coupons" element={<MyCoupons />} />
         <Route path="/profile/outgoing-requests" element={<OutgoingRequests />} />
         <Route path="/profile/incoming-requests" element={<IncomingRequests />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/shipping" element={<Shipping />} />
+        <Route path="/place-order" element={<PlaceOrder />} />
+        <Route path="/my-orders" element={<MyOrders />} />
+        <Route path="/orders/:id" element={<OrderDetails />} />
 
       
       </Route>

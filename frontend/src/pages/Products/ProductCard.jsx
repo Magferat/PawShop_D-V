@@ -3,6 +3,8 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { addToCart } from "../../redux/features/cart/cartSlice";
+
 
 const ProductCard = ({ p }) => {
   const dispatch = useDispatch();
@@ -10,6 +12,11 @@ const ProductCard = ({ p }) => {
   const isUser = userInfo && !userInfo.isAdmin;
 
   const addToCartHandler = (product, qty) => {
+    dispatch(addToCart({ ...product, qty }));
+    toast.success("Item added successfully", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
   };
 
   return (

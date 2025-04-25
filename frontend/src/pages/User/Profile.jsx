@@ -133,7 +133,7 @@ const Profile = () => {
                 Update
               </button>
               <Link
-                to="/user-orders"
+                to="/my-orders"
                 className="bg-pink-600 hover:bg-pink-700 text-white py-2 px-6 rounded-lg text-center font-semibold transition duration-200 w-full"
               >
                 My Orders
