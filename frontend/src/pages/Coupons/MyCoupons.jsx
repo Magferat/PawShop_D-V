@@ -4,6 +4,7 @@ import { format } from "date-fns";
 
 const MyCoupons = () => {
   const { data: userCoupons, isLoading, error } = useGetUserCouponsQuery();
+  console.log(userCoupons)
 
   return (
     <div className="max-w-5xl mx-auto p-6">

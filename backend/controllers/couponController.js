@@ -75,9 +75,10 @@ const assignCoupon = asyncHandler(async (req, res) => {
 
 // Get user's assigned coupons
 const getUserCoupons = asyncHandler(async (req, res) => {
-  const coupons = await UserCoupon.find({ user: req.user._id });
+  const coupons = await UserCoupon.find({ user: req.user._id }).populate('couponTemplate');
   res.json(coupons);
 });
+
 
 // Delete a coupon type (Admin only)
 const deleteCoupon = asyncHandler(async (req, res) => {
