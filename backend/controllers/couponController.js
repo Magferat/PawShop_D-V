@@ -1,17 +1,15 @@
+import mongoose from 'mongoose';
 import asyncHandler from "../middlewares/asyncHandler.js"; 
 import Coupon from "../models/couponModel.js";
 import User from "../models/userModel.js";
-import UserCoupon from "../models/userCouponModel.js"; // import the user-specific coupon model
+import UserCoupon from "../models/userCouponModel.js";
 
-// Generate a unique code for user coupons
-const generateUniqueCode = () => 'USR-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-
-// Create a coupon (Admin only)
+// Admin: Create a coupon template
 const createCoupon = asyncHandler(async (req, res) => {
-  let { templateCode, discountValue, pointCost, description } = req.body;
+  const { templateCode, discountValue, pointCost, description } = req.body;
 
-  if (!templateCode) {
-    code = generateUniqueCode();
+  if (!templateCode || !discountValue || !pointCost) {
+    return res.status(400).json({ message: 'Missing required fields' });
   }
 
   const existing = await Coupon.findOne({ templateCode });
@@ -23,14 +21,13 @@ const createCoupon = asyncHandler(async (req, res) => {
   res.status(201).json(coupon);
 });
 
-// Get all available coupon types (public list)
+// Public: Get all available coupon templates
 const getCoupons = asyncHandler(async (req, res) => {
   const coupons = await Coupon.find();
   res.json(coupons);
 });
 
-// Assign a coupon from a category to a user (creates a unique user coupon)
-
+// User: Redeem a coupon from a template
 const assignCoupon = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const templateId = req.params.id;
@@ -49,37 +46,39 @@ const assignCoupon = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'Insufficient points' });
   }
 
-  // Deduct points
+  let userCoupon = await UserCoupon.findOne({
+    user: user._id,
+    couponTemplate: couponTemplate._id,
+  });
+
+  if (userCoupon) {
+    userCoupon.quantity += 1;
+    await userCoupon.save();
+  } else {
+    userCoupon = await UserCoupon.create({
+      user: user._id,
+      couponTemplate: couponTemplate._id,
+      quantity: 1,
+    });
+  }
+
   user.points -= couponTemplate.pointCost;
   await user.save();
 
-  // Generate a unique code for this assigned coupon
-  const uniqueCode = 'CPN-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-
-  // Save the assigned coupon
-  const userCoupon = new UserCoupon({
-    user: user._id,
-    couponTemplate: couponTemplate._id,
-    uniqueCode,
-  });
-
-  await userCoupon.save();
-
-  res.json({
+  res.status(200).json({
     message: 'Coupon assigned successfully',
     userCoupon,
     remainingPoints: user.points,
   });
 });
 
-
-// Get user's assigned coupons
+// User: Get their redeemed coupons
 const getUserCoupons = asyncHandler(async (req, res) => {
-  const coupons = await UserCoupon.find({ user: req.user._id });
+  const coupons = await UserCoupon.find({ user: req.user._id }).populate('couponTemplate');
   res.json(coupons);
 });
 
-// Delete a coupon type (Admin only)
+// Admin: Delete a coupon template
 const deleteCoupon = asyncHandler(async (req, res) => {
   const coupon = await Coupon.findByIdAndDelete(req.params.id);
   if (!coupon) {
@@ -89,4 +88,33 @@ const deleteCoupon = asyncHandler(async (req, res) => {
   res.json({ message: 'Coupon deleted successfully', coupon });
 });
 
-export { createCoupon, getCoupons, assignCoupon, getUserCoupons, deleteCoupon };
+// User: Use a coupon (decrease quantity or remove if 0)
+const useCoupon = asyncHandler(async (req, res) => {
+  const userCoupon = await UserCoupon.findOne({
+    user: req.user._id,
+    couponTemplate: req.params.id,
+  });
+
+  if (!userCoupon || userCoupon.quantity <= 0) {
+    return res.status(400).json({ message: 'No such coupon available' });
+  }
+
+  userCoupon.quantity -= 1;
+
+  if (userCoupon.quantity === 0) {
+    await userCoupon.deleteOne();
+  } else {
+    await userCoupon.save();
+  }
+
+  res.json({ message: 'Coupon used successfully' });
+});
+
+export {
+  createCoupon,
+  getCoupons,
+  assignCoupon,
+  getUserCoupons,
+  deleteCoupon,
+  useCoupon
+};
