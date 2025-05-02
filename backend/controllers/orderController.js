@@ -12,9 +12,6 @@ function calcPrices(orderItems) {
     );
 
     const shippingPrice = itemsPrice > 100 ? 100 : 10;
-
-
-    // const shippingPrice = itemsPrice > 100 ? 100 : 10;
     const taxRate = 0.15;
     const taxPrice = (itemsPrice * taxRate).toFixed(2);
     const totalPrice = (
@@ -22,7 +19,6 @@ function calcPrices(orderItems) {
         shippingPrice +
         parseFloat(taxPrice)
     ).toFixed(2);
-    // const pointsEarned = Math.fround(totalPrice / 10)
 
 
     return {
@@ -41,33 +37,43 @@ const createOrder = async (req, res) => {
             return res.status(400).json({ message: "No order items" });
         }
 
-        const itemsFromDB = await Product.find({
-            _id: { $in: orderItems.map((x) => x._id) },
-        });
+        // Extract product IDs correctly
+        const productIds = orderItems.map((item) =>
+            item.product._id ? item.product._id : item.product
+        );
 
-        const dbOrderItems = orderItems.map((itemFromClient) => {
-            const matchingItemFromDB = itemsFromDB.find(
-                (itemFromDB) => itemFromDB._id.toString() === itemFromClient._id
+        // Fetch full product details from DB
+        const itemsFromDB = await Product.find({ _id: { $in: productIds } });
+
+        // Construct order items with validated price from DB
+        const dbOrderItems = orderItems.map((clientItem) => {
+            const productId = clientItem.product._id || clientItem.product;
+
+            const matchingItem = itemsFromDB.find(
+                (dbItem) => dbItem._id.toString() === productId.toString()
             );
 
-            if (!matchingItemFromDB) {
-                throw new Error(`Product not found: ${itemFromClient._id}`);
+            if (!matchingItem) {
+                throw new Error(`Product not found: ${productId}`);
             }
 
             return {
-                ...itemFromClient,
-                product: itemFromClient._id,
-                price: matchingItemFromDB.price,
-                _id: undefined,
+                name: matchingItem.name,
+                image: matchingItem.image,
+                price: matchingItem.price,
+                product: matchingItem._id,
+                qty: clientItem.qty,
             };
         });
 
-        const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
-            calcPrices(dbOrderItems);
-
+        // Calculate prices
+        const itemsPrice = dbOrderItems.reduce((acc, item) => acc + item.qty * item.price, 0);
+        const shippingPrice = itemsPrice > 1000 ? 0 : 100;
+        const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
+        const totalPrice = Number((itemsPrice + shippingPrice + taxPrice).toFixed(2));
         const pointsEarned = Math.floor(totalPrice / 10);
 
-        // ✅ Create order
+        // Create order document
         const order = new Order({
             orderItems: dbOrderItems,
             user: req.user._id,
@@ -81,84 +87,49 @@ const createOrder = async (req, res) => {
 
         const createdOrder = await order.save();
 
-        // ✅ Update user's points
+        // Update user points
         const user = await User.findById(req.user._id);
         user.points += pointsEarned;
         await user.save();
 
+        // Decrease product stock
+        for (const item of dbOrderItems) {
+            const product = await Product.findById(item.product);
+
+            if (product) {
+                product.countInStock = Math.max(0, product.countInStock - item.qty);
+                await product.save();
+            }
+        }
+
+
         res.status(201).json({ order: createdOrder, newPoints: user.points });
 
+
+
     } catch (error) {
-        console.error("❌ Error in createOrder:", error); // <-- this line
-
-        res.status(500).json({ error: error.message });
-
+        console.error("❌ Error in createOrder:", error.message);
+        res.status(500).json({ message: error.message });
     }
 };
 
-// const createReOrder = async (req, res) => {
-//     try {
-//         const { orderItems, shippingAddress } = req.body;
+const findOrderById = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id).populate(
+            "user",
+            "username email"
+        );
 
-//         if (!orderItems || orderItems.length === 0) {
-//             return res.status(400).json({ message: "No order items" });
-//         }
-
-//         // Find products in DB using the `product` field instead of `_id`
-//         const itemsFromDB = await Product.find({
-//             _id: { $in: orderItems.map((x) => x.product) }, // 👈 using product reference
-//         });
-
-//         // Map the orderItems and get the correct product info
-//         const dbOrderItems = orderItems.map((itemFromClient) => {
-//             const matchingItemFromDB = itemsFromDB.find(
-//                 (itemFromDB) => itemFromDB._id.toString() === itemFromClient.product
-//             );
-
-//             if (!matchingItemFromDB) {
-//                 throw new Error(`Product not found: ${itemFromClient.product}`);
-//             }
-
-//             return {
-//                 ...itemFromClient,
-//                 product: itemFromClient.product, // using product reference here
-//                 price: matchingItemFromDB.price,
-//                 _id: undefined, // Remove cart item's _id
-//             };
-//         });
-
-//         const { itemsPrice, taxPrice, shippingPrice, totalPrice } = calcPrices(dbOrderItems);
-
-//         const pointsEarned = Math.floor(totalPrice / 10);
-
-//         // Create the order with the correct orderItems
-//         const order = new Order({
-//             orderItems: dbOrderItems,
-//             user: req.user._id,
-//             shippingAddress,
-//             itemsPrice,
-//             taxPrice,
-//             shippingPrice,
-//             totalPrice,
-//             pointsEarned,
-//         });
-
-//         const createdOrder = await order.save();
-
-//         // Update the user's points
-//         const user = await User.findById(req.user._id);
-//         user.points += pointsEarned;
-//         await user.save();
-
-//         res.status(201).json({ order: createdOrder, newPoints: user.points });
-
-//     } catch (error) {
-//         console.error("❌ Error in createOrder:", error); // <-- this line
-
-//         res.status(500).json({ error: error.message });
-//     }
-// };
-
+        if (order) {
+            res.json(order);
+        } else {
+            res.status(404);
+            throw new Error("Order not found");
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 const getAllOrders = async (req, res) => {
     try {
@@ -171,9 +142,7 @@ const getAllOrders = async (req, res) => {
 
 const getUserOrders = async (req, res) => {
     try {
-        // const orders = await Order.find({ user: req.user._id });
-        // const orders = await Order.find({ user: req.user._id }).select(
-        // );
+
         const orders = await Order.find({ user: req.user._id }).populate('user', 'username email');
 
         res.json(orders);
@@ -225,104 +194,6 @@ const calcualteTotalSalesByDate = async (req, res) => {
     }
 };
 
-const findOrderById = async (req, res) => {
-    try {
-        const order = await Order.findById(req.params.id).populate(
-            "user",
-            "username email"
-        );
-
-        if (order) {
-            res.json(order);
-        } else {
-            res.status(404);
-            throw new Error("Order not found");
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-// const findOrderById = async (req, res) => {
-//     try {
-//         const order = await Order.findById(req.params.id).populate(
-//             "user",
-//             "username email points"
-
-//         );
-
-//         if (!order) {
-//             return res.status(404).json({ message: "Order not found" });
-//         }
-
-//         // Enrich orderItems with current countInStock
-//         const enrichedItems = await Promise.all(
-//             order.orderItems.map(async (item) => {
-//                 const product = await Product.findById(item.product);
-//                 return {
-//                     ...item.toObject(),
-//                     countInStock: product?.countInStock || 0,
-//                 };
-//             })
-//         );
-
-//         // Inject enriched items back into order object
-//         const updatedOrder = {
-//             ...order.toObject(),
-//             orderItems: enrichedItems,
-//         };
-
-//         res.json(updatedOrder);
-
-//     } catch (error) {
-//         console.error("❌ Error in findOrderById:", error);
-//         res.status(500).json({ error: error.message });
-//     }
-// };
-
-
-const markOrderAsPaid = async (req, res) => {
-    try {
-        const order = await Order.findById(req.params.id);
-
-        if (order) {
-            order.isPaid = true;
-            order.paidAt = Date.now();
-            order.paymentResult = {
-                id: req.body.id,
-                status: req.body.status,
-                update_time: req.body.update_time,
-                email_address: req.body.payer.email_address,
-            };
-
-            const updateOrder = await order.save();
-            res.status(200).json(updateOrder);
-        } else {
-            res.status(404);
-            throw new Error("Order not found");
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-const markOrderAsDelivered = async (req, res) => {
-    try {
-        const order = await Order.findById(req.params.id);
-
-        if (order) {
-            order.isDelivered = true;
-            order.deliveredAt = Date.now();
-
-            const updatedOrder = await order.save();
-            res.json(updatedOrder);
-        } else {
-            res.status(404);
-            throw new Error("Order not found");
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
 
 export {
     createOrder,
@@ -332,6 +203,6 @@ export {
     calculateTotalSales,
     calcualteTotalSalesByDate,
     findOrderById,
-    markOrderAsPaid,
-    markOrderAsDelivered,
+    // markOrderAsPaid,
+    // markOrderAsDelivered,
 };
