@@ -6,23 +6,16 @@ const UserCouponSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-
   couponTemplate: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Coupon',
     required: true,
   },
-
-  uniqueCode: {
-    type: String,
+  quantity: {
+    type: Number,
     required: true,
-    unique: true,
+    default: 1,
   },
-
-  redeemedAt: {
-    type: Date,
-    default: Date.now,
-  }
 }, {
   timestamps: true,
 });
