@@ -77,12 +77,30 @@ const TopNavbar = () => {
           </li>
 
           {userInfo?.isAdmin && (
-            <li><Link to="/admin/userlist">Users</Link></li>
+            <>
+              <li><Link to="/admin/userlist">Users</Link></li>
+              {/* <li><Link to="/services">Services</Link></li> */}
+
+            <li className="relative group">
+            <button className="focus:outline-none">Services</button>
+            <ul className="absolute top-full right-0 mt-0 min-w-[12rem] bg-white shadow border rounded text-sm hidden group-hover:block z-50">
+                  {/* <li><Link to="/services" className="block px-4 py-2 hover:bg-gray-100">Services</Link></li> */}
+                  <li><Link to="/admin/allservices" className="block px-4 py-2 hover:bg-gray-100">Services List</Link></li>
+                  <li><Link to="/admin/addservice" className="block px-4 py-2 hover:bg-gray-100">Add Service</Link></li>
+            </ul>
+          </li>
+            </>
           )}
 
           {userInfo && !userInfo.isAdmin && (
             <>
-              <li><Link to="/bookings">Bookings</Link></li>
+              <li className="relative group">
+                <button className="focus:outline-none">Services</button>
+                <ul className="absolute top-full right-0 mt-0 min-w-[10rem] bg-white shadow border rounded text-sm hidden group-hover:block z-50">
+                  <li><Link to="/services" className="block px-4 py-2 hover:bg-gray-100">Services</Link></li>
+                  <li><Link to="/calendar" className="block px-4 py-2 hover:bg-gray-100">My Calendar</Link></li>
+                </ul>
+              </li>
               <li><Link to="/cart">Cart</Link></li>
             </>
           )}
