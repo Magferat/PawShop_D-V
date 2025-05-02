@@ -1,7 +1,13 @@
-import User from "../models/userModel.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
+//
+import User from "../models/userModel.js";
+import Pet from "../models/petModel.js"; 
+import Complaint from '../models/complaintModel.js';
+import Coupon from '../models/couponModel.js';
+import Order from "../models/orderModel.js";
+import Request from "../models/petrequestModel.js";
 
 const createUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -126,19 +132,31 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
 const deleteUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
-  if (user) {
-    if (user.isAdmin) {
-      res.status(400);
-      throw new Error("Cannot delete admin user");
-    }
-
-    await User.deleteOne({ _id: user._id });
-    res.json({ message: "User removed" });
-  } else {
+  if (!user) {
     res.status(404);
     throw new Error("User not found.");
   }
+
+  if (user.isAdmin) {
+    res.status(400);
+    throw new Error("Cannot delete admin user");
+  }
+
+  // Delete related documents
+  await Promise.all([
+    Pet.deleteMany({ ownerId: user._id }),
+    Complaint.deleteMany({ submittedBy: user._id }),
+    Coupon.deleteMany({ user: user._id }),
+    Order.deleteMany({ user: user._id }),
+    Request.deleteMany({ requesteder: user._id })
+  ]);
+
+  // Delete the user
+  await User.deleteOne({ _id: user._id });
+
+  res.json({ message: "User and all related data removed successfully." });
 });
+
 
 const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select("-password");

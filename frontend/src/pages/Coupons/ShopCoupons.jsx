@@ -1,18 +1,24 @@
 import React from "react";
-import { useGetCouponsQuery, useAssignCouponMutation } from "../../redux/api/couponApiSlice";
+import {
+  useGetCouponsQuery,
+  useAssignCouponMutation,
+  useGetUserCouponsQuery,
+} from "../../redux/api/couponApiSlice";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const ShopCoupons = () => {
   const { data: coupons, isLoading, error } = useGetCouponsQuery();
   const [assignCoupon, { isLoading: assigning }] = useAssignCouponMutation();
+  const { refetch: refetchUserCoupons } = useGetUserCouponsQuery(); // <-- for live updates
 
   const { userInfo } = useSelector((state) => state.auth);
 
   const handleRedeem = async (couponId) => {
     try {
-      const res = await assignCoupon(couponId).unwrap();
+      await assignCoupon(couponId).unwrap();
       toast.success("Coupon redeemed successfully!");
+      refetchUserCoupons(); // <-- Refresh user coupons
     } catch (err) {
       toast.error(err?.data?.message || "Could not redeem coupon");
     }
@@ -25,7 +31,7 @@ const ShopCoupons = () => {
       <h1 className="text-3xl font-bold mb-8 text-center text-pink-700">
         Available Coupons
       </h1>
-  
+
       {isLoading ? (
         <p className="text-center text-gray-600">Loading coupons...</p>
       ) : error ? (
@@ -51,7 +57,7 @@ const ShopCoupons = () => {
               <p className="text-gray-700 mb-3">
                 <strong>Description:</strong> {coupon.description}
               </p>
-  
+
               {isUser ? (
                 <button
                   onClick={() => handleRedeem(coupon._id)}
@@ -71,7 +77,6 @@ const ShopCoupons = () => {
       )}
     </div>
   );
-  
 };
 
 export default ShopCoupons;
