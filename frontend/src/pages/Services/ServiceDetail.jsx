@@ -123,7 +123,7 @@ const ServiceDetailPage = () => {
               <h3 className="font-bold text-lg text-gray-900">{pkg.name}</h3>
               <p className="text-sm text-gray-700 mt-1">{pkg.description}</p>
               <p className="mt-2 text-sm text-gray-700">
-                Duration: {pkg.duration} mins | Price: ${pkg.price}
+                Duration: {pkg.duration} mins | Price: BDT {pkg.price}
               </p>
               <p className="mt-2 text-sm text-gray-700">
                 Suitable for: {pkg.petType.join(", ")}

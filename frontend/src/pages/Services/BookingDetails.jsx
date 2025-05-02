@@ -90,7 +90,7 @@ const AppointmentDetailsPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-800">
             <p><span className="font-semibold">Pet Types:</span> {servicePackage.petType.join(", ")}</p>
             <p><span className="font-semibold">Duration:</span> {servicePackage.duration} minutes</p>
-            <p><span className="font-semibold">Price:</span> ${servicePackage.price}</p>
+            <p><span className="font-semibold">Price:</span>  BDT {servicePackage.price}</p>
           </div>
         </div>
       )}
