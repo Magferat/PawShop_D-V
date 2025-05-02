@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userreviewSchema = mongoose.Schema(
+const userReviewSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
     rating: { type: Number, required: true },
@@ -14,53 +14,40 @@ const userreviewSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const userSchema = mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-  },
+const userSchema = mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+    },
 
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
 
-  password: {
-    type: String,
-    required: true,
-  },
+    password: {
+      type: String,
+      required: true,
+    },
 
-  isAdmin: {
-    type: Boolean,
-    default: false,
-  },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
 
-    reviews: [userreviewSchema],
+    reviews: [userReviewSchema],
     rating: { type: Number, required: true, default: 0 },
     numReviews: { type: Number, required: true, default: 0 },
 
-
-  points: {
-    type: Number,
-    default: 50,
+    points: {
+      type: Number,
+      default: 50,
+    },
   },
+  { timestamps: true }
+);
 
-  assignedCoupons: [
-    {
-      code: String,
-      discountValue: Number,
-      pointCost: Number,
-      description: String,
-      templateCode: String,
-      redeemedAt: {
-        type: Date,
-        default: Date.now
-      }
-    }
-  ]
-  
-}, { timestamps: true });
-
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;
