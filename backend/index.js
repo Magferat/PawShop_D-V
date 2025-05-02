@@ -16,6 +16,8 @@ import petRequestRoutes from "./routes/petrequestsRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
+import complaintRoutes from "./routes/complaintRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -38,6 +40,8 @@ app.use("/api/requests", petRequestRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/appointments", appointmentRoutes);
+app.use("/api/complaints", complaintRoutes);
+app.use("/api/cart", cartRoutes);
 
 
 const __dirname = path.resolve();

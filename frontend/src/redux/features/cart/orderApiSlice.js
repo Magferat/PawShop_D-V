@@ -1,13 +1,13 @@
 // api/orderApi/Slice
 
-import { apiSlice } from "./apiSlice";
-import { ORDERS_URL } from "../constants";
+import { apiSlice } from "../../api/apiSlice";
+import { ORDERS_URL } from "../../constants";
 
 export const orderApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         createOrder: builder.mutation({
             query: (order) => ({
-                url: ORDERS_URL,
+                url: ORDERS_URL, // api/orders
                 method: "POST",
                 body: order,
             }),
@@ -19,8 +19,6 @@ export const orderApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
-
-
         getMyOrders: builder.query({
             query: () => ({
                 url: `${ORDERS_URL}/mine`,
@@ -28,11 +26,14 @@ export const orderApiSlice = apiSlice.injectEndpoints({
             keepUnusedDataFor: 5,
         }),
 
-        getOrders: builder.query({
+        getAllOrders: builder.query({
             query: () => ({
                 url: ORDERS_URL,
             }),
         }),
+        // features/api/orderApiSlice.js
+
+
 
         deliverOrder: builder.mutation({
             query: (orderId) => ({
@@ -64,5 +65,7 @@ export const {
     useGetOrderDetailsQuery,
     useGetMyOrdersQuery,
     useDeliverOrderMutation,
-    useGetOrdersQuery,
+    // useGetOrdersQuery,
+    useGetAllOrdersQuery,
+
 } = orderApiSlice;

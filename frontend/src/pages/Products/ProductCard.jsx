@@ -3,20 +3,34 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { addToCart } from "../../redux/features/cart/cartSlice";
+// import { addToCart } from "../../redux/features/cart/cartSlice";
+import { useAddToCartMutation } from "../../redux/features/cart/cartApiSlice";
 
 
 const ProductCard = ({ p }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const isUser = userInfo && !userInfo.isAdmin;
+  const [addToCart, refetch] = useAddToCartMutation();
 
-  const addToCartHandler = (product, qty) => {
-    dispatch(addToCart({ ...product, qty }));
-    toast.success("Item added successfully", {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 2000,
-    });
+  const addToCartHandler = async (product, qty) => {
+    const clampedQty = Math.max(1, Math.min(qty, product.countInStock));
+    console.log("product id ", product);
+
+    try {
+      console.log("product id ", product._id);
+      const res = await addToCart({
+        productId: product._id, // Only sending productId and qty
+        qty: clampedQty
+      });
+      console.log(res);
+
+      toast.success("Added to cart");
+      // refetch();
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to add to cart");
+    }
   };
 
   return (

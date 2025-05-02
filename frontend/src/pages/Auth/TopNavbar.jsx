@@ -3,9 +3,16 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../../redux/api/usersApiSlice";
 import { logoutUser } from "../../redux/features/auth/authSlice";
+import { useGetCartQuery } from "../../redux/features/cart/cartApiSlice";
 
 const TopNavbar = () => {
   const { userInfo } = useSelector((state) => state.auth);
+
+  // const { cartItems } = useSelector((state) => state.cart);
+  // const { cartItems } = useSelector((state) => state.cart);
+  const { data: cart, refetch } = useGetCartQuery();
+  const cartItems = cart?.cartItems || [];
+  
   const dispatch = useDispatch();
   const [logoutApiCall] = useLogoutMutation();
 
@@ -43,6 +50,7 @@ const TopNavbar = () => {
               {userInfo?.isAdmin ? (
                 <>
                   <li><Link to="/admin/allproductslist" className="block px-4 py-2 hover:bg-gray-100">Product List</Link></li>
+                  <li><Link to="/admin/orders" className="block px-4 py-2 hover:bg-gray-100">Order List</Link></li>
                   <li><Link to="/admin/allcoupons" className="block px-4 py-2 hover:bg-gray-100">Coupon List</Link></li>
                   <li><Link to="/admin/productlist" className="block px-4 py-2 hover:bg-gray-100">Create Product</Link></li>
                   <li><Link to="/admin/addcoupon" className="block px-4 py-2 hover:bg-gray-100">Create Coupon</Link></li>
@@ -101,7 +109,11 @@ const TopNavbar = () => {
                   <li><Link to="/calendar" className="block px-4 py-2 hover:bg-gray-100">My Calendar</Link></li>
                 </ul>
               </li>
-              <li><Link to="/cart">Cart</Link></li>
+                {/* <li><Link to="/cart">Cart ({cartItems.reduce((a, c) => a + c.qty, 0)}) */}
+                <li><Link to="/cart">Cart ({cartItems.length})
+                {/* <li><Link to="/cart">Cart ({cartItems.length}) */}
+
+              </Link></li>
             </>
           )}
 
@@ -116,6 +128,11 @@ const TopNavbar = () => {
                 <li>
                   <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100">
                     View Profile
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/my-orders" className="block px-4 py-2 hover:bg-gray-100">
+                    My Orders
                   </Link>
                 </li>
                 <li>

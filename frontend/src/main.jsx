@@ -44,11 +44,14 @@ import AllCouponsAdmin from "./pages/Coupons/AllCoupons.jsx";
 import OutgoingRequests from "./pages/User/OutgoingRequests.jsx";
 import IncomingRequests from "./pages/User/IncomingRequests.jsx";
 
-import Cart from "./pages/Cart/cart.jsx";
+import Cart from "./pages/Cart/Cart.jsx";
 import Shipping from "./pages/Cart/Shipping.jsx";
 import PlaceOrder from "./pages/Cart/PlaceOrder.jsx";
 import MyOrders from "./pages/Cart/MyOrders.jsx";
 import OrderDetails from "./pages/Cart/OrderDetails.jsx";
+import AdminOrderList from "./pages/Admin/AdminOrderList.jsx";
+import AdminOrderDetails from "./pages/Admin/AdminOrderDetails.jsx";
+
 
 import ServicesPage from "./pages/Services/Services.jsx";
 import ServiceDetailPage from "./pages/Services/ServiceDetail.jsx";
@@ -110,6 +113,8 @@ const router = createBrowserRouter(
         <Route path=":serviceId/editpackage/:packageId" element={<EditPackagePage />} />
         <Route path=":serviceId/addpackage" element={<AddPackagePage />} />
         <Route path="addservice" element={<AddServicePage />} />
+        <Route path="orders" element={<AdminOrderList />} />
+        <Route path="order/:id" element={<AdminOrderDetails />} />
       </Route>
     </Route>
   )

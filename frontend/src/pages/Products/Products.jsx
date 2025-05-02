@@ -9,7 +9,7 @@ import {
 import Rating from "./Rating";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { addToCart } from "../../redux/features/cart/cartSlice";
+// import { addToCart } from "../../redux/features/cart/cartSlice";
 import {
   FaBox,
   FaClock,
@@ -19,6 +19,7 @@ import {
 } from "react-icons/fa";
 import moment from "moment";
 import ProductTabs from "./Tabs";
+import { useAddToCartMutation } from "../../redux/features/cart/cartApiSlice";
 
 
 const Product = () => {
@@ -42,10 +43,17 @@ const Product = () => {
   const [createReview, { isLoading: loadingProductReview }] =
     useCreateReviewMutation();
 
-  const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty }));
-    navigate("/cart");
-  };
+    const [addToCartApi] = useAddToCartMutation();
+
+    const addToCartHandler = async () => {
+      try {
+        await addToCartApi({ productId: product._id, qty }).unwrap();
+        toast.success("Added to cart");
+        navigate("/cart");
+      } catch (err) {
+        toast.error(err?.data?.message || "Failed to add to cart");
+      }
+    };
 
   const submitHandler = async (e) => {
     e.preventDefault();

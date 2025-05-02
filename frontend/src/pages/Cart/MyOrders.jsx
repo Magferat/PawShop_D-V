@@ -157,7 +157,7 @@ const MyOrders = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto mt-8 p-4">
+        <div className="font-serif max-w-4xl mx-auto mt-8 p-4">
             <h1 className="text-4xl font-extrabold text-center mb-8 text-orange-800 shadow-sm">
                 Purchase History
             </h1>
@@ -210,10 +210,17 @@ const MyOrders = () => {
                                     </div>
                                     <Link
                                         to={`/orders/${order._id}`}
+                                        state={{ fromPlaceOrder: false }}
+                                        className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-1 rounded"
+                                    >
+                                        View Details
+                                    </Link>
+                                    {/* <Link
+                                        to={`/orders/${order._id}`}
                                         className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-1 rounded"
                                     >
                                         Order Details
-                                    </Link>
+                                    </Link> */}
                                 </div>
 
                                 <div className="bg-orange-300 px-6 py-4 flex justify-between items-center text-white font-semibold text-sm">
