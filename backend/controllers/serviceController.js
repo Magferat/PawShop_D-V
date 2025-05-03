@@ -77,7 +77,7 @@ const updateService = asyncHandler(async (req, res) => {
   service.phone = phone ?? service.phone;
   service.category = category ?? service.category;
   service.description = description ?? service.description;
-  service.workingHours = workingHours ?? service.workingHours;
+  service.workingHours = workingHours ?? service.workingHours;   //Updates fields only if new values are provided (?? ensures fallback to old value)
 
   await service.save();
   res.json(service);

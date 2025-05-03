@@ -2,6 +2,8 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import Appointment from "../models/appointmentModel.js";
 import Service from "../models/serviceModel.js";
 import moment from "moment-timezone";
+import UserCoupon from "../models/userCouponModel.js"; 
+import Coupon from "../models/couponModel.js";
 
 // Helper functions
 const timeToMinutes = (timeStr) => {
@@ -239,6 +241,103 @@ const clearGoogleEventId = async (req, res) => {
   }
 };
 
+// const isCouponApplicable = (couponTemplateCode, serviceCategory) => {
+//   const categoryMap = {
+//     GROOM: 'grooming',
+//     VET: 'vet',
+//     // Add more if needed
+//   };
+
+//   const matched = Object.entries(categoryMap).find(
+//     ([codePart, category]) =>
+//       couponTemplateCode.toUpperCase().includes(codePart) &&
+//       serviceCategory.toLowerCase() === category
+//   );
+
+//   return Boolean(matched);
+// };
+
+const handleCouponChange = asyncHandler(async (req, res) => {
+  const { action, userCouponId } = req.body;
+  const appointment = await Appointment.findById(req.params.id).populate('service');
+  if (!appointment) return res.status(404).json({ error: 'Appointment not found' });
+
+  // Check if coupon is already used in the appointment
+  const couponUsed = appointment.couponUsed;
+
+  // Find the user coupon if it exists
+  let userCoupon = null;
+  if (couponUsed) {
+    userCoupon = await UserCoupon.findOne({
+      _id: couponUsed,
+      user: req.user._id,
+    }).populate('couponTemplate');
+  }
+
+  if (action === 'apply') {
+    // Handle apply action
+    if (couponUsed)
+      return res.status(400).json({ error: 'A coupon is already applied' });
+
+    // If user coupon exists, handle it
+    userCoupon = await UserCoupon.findOne({
+      _id: userCouponId,
+      user: req.user._id,
+    }).populate('couponTemplate');
+    if (!userCoupon) return res.status(404).json({ error: 'Coupon not found for user' });
+
+    // const coupon = userCoupon.couponTemplate;
+    // const applicable = isCouponApplicable(coupon.templateCode, appointment.service.category);
+    // if (!applicable)
+    //   return res.status(400).json({ error: 'This coupon is not valid for the selected service category' });
+
+    appointment.couponUsed = userCoupon._id;
+    userCoupon.quantity -= 1;
+
+    if (userCoupon.quantity <= 0) {
+      await userCoupon.deleteOne(); // Delete coupon if quantity is zero
+    } else {
+      await userCoupon.save();
+    }
+
+    await appointment.save();
+    return res.json({ message: 'Coupon applied successfully', appointment });
+
+  } else if (action === 'remove') {
+    // Handle remove action
+    if (!couponUsed)
+      return res.status(400).json({ error: 'No coupon applied' });
+
+    // If the coupon has already been deleted from UserCoupon
+    if (!userCoupon) {
+      return res.status(400).json({ error: 'Coupon has already been removed from your account' });
+    }
+
+    // Return coupon to user
+    const existing = await UserCoupon.findOne({
+      user: req.user._id,
+      couponTemplate: userCoupon.couponTemplate._id,
+    });
+
+    if (existing) {
+      existing.quantity += 1;
+      await existing.save();
+    } else {
+      await UserCoupon.create({
+        user: req.user._id,
+        couponTemplate: userCoupon.couponTemplate._id,
+        quantity: 1,
+      });
+    }
+
+    appointment.couponUsed = undefined;
+    await appointment.save();
+    return res.json({ message: 'Coupon removed successfully', appointment });
+  } else {
+    return res.status(400).json({ error: 'Invalid action' });
+  }
+});
+
 export {
   bookAppointment,
   getAvailableTimeSlots,
@@ -248,4 +347,5 @@ export {
   updateAppointmentStatus,
   saveGoogleEventId,
   clearGoogleEventId,
+  handleCouponChange
 };

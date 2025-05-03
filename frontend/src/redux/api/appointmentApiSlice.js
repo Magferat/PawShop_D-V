@@ -55,10 +55,17 @@ export const appointmentApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    applyOrRemoveCoupon: builder.mutation({
+      query: ({ appointmentId, action, userCouponId }) => ({
+        url: `${APPOINTMENT_URL}/${appointmentId}/coupon`,
+        method: 'PUT',
+        body: { action, userCouponId },
+      }),
+      invalidatesTags: ['Appointment', 'UserCoupon'], // Invalidate relevant cache if needed
+    }),
+
+
   }),
-
-
-
 });
 
 export const {
@@ -69,4 +76,5 @@ export const {
   useUpdateAppointmentStatusMutation,
   useSaveGoogleEventIdMutation,
   useClearGoogleEventIdMutation,
+  useApplyOrRemoveCouponMutation,
 } = appointmentApiSlice;

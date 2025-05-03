@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import Loader from "../../components/Loader";
 import UserMenu from "./UserMenu";
-import { useProfileMutation } from "../../redux/api/usersApiSlice";
+import { useProfileMutation, useUploadImageMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials } from "../../redux/features/auth/authSlice";
 
 const Profile = () => {
@@ -13,18 +13,23 @@ const Profile = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [image, setImage] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [updateProfile, { isLoading: loadingUpdateProfile }] =
-    useProfileMutation();
-
-  useEffect(() => {
-    setUserName(userInfo.username);
-    setEmail(userInfo.email);
-  }, [userInfo.email, userInfo.username]);
+  // Using custom hooks for mutations
+  const [updateProfile, { isLoading: loadingUpdateProfile }] = useProfileMutation();
+  const [uploadImage, { isLoading: loadingImageUpload }] = useUploadImageMutation();
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("User Image:", userInfo)
+    setUserName(userInfo.username);
+    setEmail(userInfo.email);
+    setImage(userInfo.image || ""); // preload image if it exists
+  }, [userInfo]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -45,11 +50,30 @@ const Profile = () => {
         username,
         email,
         password,
+        image, // send image URL
       }).unwrap();
+
       dispatch(setCredentials({ ...res }));
       toast.success("Profile updated successfully");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
+    }
+  };
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      setUploading(true);
+      const res = await uploadImage(formData).unwrap();
+      setImage(res.image); // assuming the response returns { image: url }
+      toast.success("Image uploaded successfully");
+    } catch (error) {
+      toast.error("Image upload failed");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -68,6 +92,27 @@ const Profile = () => {
           </h2>
 
           <form onSubmit={submitHandler} className="space-y-5">
+            {/* Image Upload */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Profile Image
+              </label>
+              {image && (
+                <img
+                  src={image}
+                  alt="Profile Preview"
+                  className="h-24 w-24 object-cover rounded-full mb-2"
+                />
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={uploadFileHandler}
+                className="block w-full text-sm text-gray-700 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:bg-pink-100 file:text-pink-700 hover:file:bg-pink-200"
+              />
+              {uploading && <Loader />}
+            </div>
+
             {/* Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">

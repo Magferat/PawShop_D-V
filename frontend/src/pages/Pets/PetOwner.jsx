@@ -65,10 +65,24 @@ const OwnerDetails = () => {
         <Message variant="danger">{error?.data?.message || error.message}</Message>
       ) : (
         <>
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Owner Details</h1>
-            <p className="text-lg text-gray-600">Name: {user.username}</p>
-            <p className="text-lg text-gray-600">Email: {user.email}</p>
+          <div className="mb-6 flex items-center">
+            {/* Display owner image */}
+            {user.image ? (
+              <img
+                src={user.image}
+                alt={user.username}
+                className="w-24 h-24 rounded-full object-cover mr-4"
+              />
+            ) : (
+              <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mr-4">
+                <span className="text-white text-xl">{user.username[0]}</span>
+              </div>
+            )}
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800 mb-2">Owner Details</h1>
+              <p className="text-lg text-gray-600">Name: {user.username}</p>
+              <p className="text-lg text-gray-600">Email: {user.email}</p>
+            </div>
           </div>
 
           <div className="mb-6">

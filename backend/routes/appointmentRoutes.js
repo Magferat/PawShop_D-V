@@ -10,6 +10,7 @@ import {
   getAvailableTimeSlots,
   saveGoogleEventId,
   clearGoogleEventId,
+  handleCouponChange
 } from "../controllers/appointmentController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -40,5 +41,6 @@ router.put('/:id/google-event', authenticate, saveGoogleEventId);
 router.put('/:id/clear-google-event', authenticate, clearGoogleEventId);
 
 
+router.put('/:id/coupon', authenticate, handleCouponChange);
 
 export default router;

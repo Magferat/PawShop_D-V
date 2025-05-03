@@ -57,6 +57,7 @@ const loginUser = asyncHandler(async (req, res) => {
         username: existingUser.username,
         email: existingUser.email,
         isAdmin: existingUser.isAdmin,
+        image: existingUser.image,
       });
     }
   }
@@ -87,6 +88,7 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
+      image: user.image,
     });
   } else {
     res.status(404);
@@ -108,6 +110,7 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
     }
 
     user.username = req.body.username || user.username;
+    user.image = req.body.image || user.image || "" // Update image if provided
 
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
@@ -122,6 +125,7 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
       username: updatedUser.username,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      image: updatedUser.image,
     });
   } else {
     res.status(404);
@@ -170,7 +174,7 @@ const getUserById = asyncHandler(async (req, res) => {
 });
 
 const getPublicUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select("username email reviews rating numReviews");
+  const user = await User.findById(req.params.id).select("username image email reviews rating numReviews");
 
   if (user) {
     res.json(user);
