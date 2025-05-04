@@ -85,10 +85,10 @@ const AppointmentDetailsPage = () => {
     const code = uc.couponTemplate.templateCode.toUpperCase();
     const category = service?.category.toLowerCase();
     return (
-      (category === "grooming" && code.includes("GROOM")) ||
-      (category === "vet" && code.includes("VET"))
+      uc.quantity > 0 && (
+        (category === "grooming" && code.includes("GROOM")) ||
+        (category === "vet" && code.includes("VET")))
     );
-
   });
 
   return (

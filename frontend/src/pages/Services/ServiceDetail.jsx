@@ -42,7 +42,7 @@ const ServiceDetailPage = () => {
       });
       setSelectedTime(null);
     }
-  }, [selectedPackage, selectedDate, checkAvailableTimeSlots, serviceId]);
+  }, [selectedPackage, selectedDate, checkAvailableTimeSlots, serviceId]);   //dependency array so use effect only when these values change
 
   const handleBooking = async () => {
     if (!selectedPackage || !selectedDate || !selectedTime) {
@@ -129,7 +129,7 @@ const ServiceDetailPage = () => {
                 Suitable for: {pkg.petType.join(", ")}
               </p>
               <p className="mt-2 text-sm text-red-700" >
-                Note that the prices listed are the base price for the package. Additional charges may apply based on the pet's condition, size and any extra services requested. Please contact us for more details.
+                Note that the prices listed are the base price for the package. Additional charges may apply. Please contact us for more details.
               </p>
             </button>
           ))}

@@ -3,7 +3,7 @@ import { useGetMyAppointmentsQuery, useSaveGoogleEventIdMutation } from "../../r
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { gapi } from "gapi-script"; // 👈 Import gapi
+import { gapi } from "gapi-script"; 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const localizer = momentLocalizer(moment);
@@ -44,7 +44,7 @@ const CalendarPage = () => {
             end,
             service: appt.service,
             packageId: appt.packageId,
-            googleEventId: appt.googleEventId,  // 👈 ADD THIS
+            googleEventId: appt.googleEventId, 
           };
         })
       );
@@ -55,7 +55,7 @@ const CalendarPage = () => {
     gapi.auth2.getAuthInstance().signIn().then(() => {
       gapi.client.load('calendar', 'v3').then(() => {
         appointments
-          .filter((event) => !event.googleEventId)  // ✅ Skip already synced
+          .filter((event) => !event.googleEventId)  // Skip already synced events
           .forEach(async (event) => {
             const eventObj = {
               summary: event.title,
@@ -90,7 +90,7 @@ const CalendarPage = () => {
                 console.log(`Google Event ID saved for appointment ${event.id}`);
                 setAppointments((prev) =>
                   prev.map((appt) =>
-                    appt.id === event.id ? { ...appt, googleEventId } : appt
+                    appt.id === event.id ? { ...appt, googleEventId } : appt   //u pdates the local appointments state by adding the googleEventId to the specific appointment that was just synced with Google Calendar
                   )
                 );                
               } catch (saveErr) {
