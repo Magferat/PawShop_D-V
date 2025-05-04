@@ -12,7 +12,7 @@ const appointmentSchema = new mongoose.Schema({
     default: 'pending'
   },
   notes: { type: String },
-  packageDuration: { type: Number, required: true },
+  packageDuration: { type: Number, required: true },   //in minutes
   googleEventId: { type: String }, 
   couponUsed: {
     type: mongoose.Schema.Types.ObjectId,
