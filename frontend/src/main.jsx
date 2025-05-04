@@ -95,6 +95,7 @@ const router = createBrowserRouter(
         <Route path="/pets/edit/:id" element={<EditPet />} />
         <Route path="/petlist" element={<PetList />} />
         <Route path="/owner/:id" element={<OwnerDetails />} />
+        {/* <Route path="/users/:id" element={<OwnerDetails />} /> */}
         <Route path="/couponshop" element={<ShopCoupons />} />
         <Route path="/my-coupons" element={<MyCoupons />} />
         <Route path="/profile/outgoing-requests" element={<OutgoingRequests />} />

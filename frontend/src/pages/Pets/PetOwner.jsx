@@ -52,6 +52,14 @@ const OwnerDetails = () => {
       }
     }
   };
+  const copyProfileLink = () => {
+    console.log(ownerId);
+    const profileUrl = `${window.location.origin}/owner/${ownerId}`;
+    navigator.clipboard.writeText(profileUrl)
+      .then(() => toast.success("Profile link copied to clipboard!"))
+      .catch(() => toast.error("Failed to copy link."));
+  };
+
 
   return (
     <div className="max-w-4xl mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg">
@@ -82,6 +90,13 @@ const OwnerDetails = () => {
               <h1 className="text-3xl font-bold text-gray-800 mb-2">Owner Details</h1>
               <p className="text-lg text-gray-600">Name: {user.username}</p>
               <p className="text-lg text-gray-600">Email: {user.email}</p>
+              <button
+                onClick={copyProfileLink}
+                className="mt-2 text-sm text-blue-600 hover:underline"
+              >
+                📋 Copy Profile Link
+              </button>
+
             </div>
           </div>
 

@@ -1,9 +1,6 @@
 import Cart from "../models/cartModel.js";
 import Product from "../models/productModel.js";
-// export const getCart = async (req, res) => {
-//     const cart = await Cart.findOne({ userId: req.user._id });
-//     res.json(cart || { cartItems: [] });
-// };
+
 export const getCart = async (req, res) => {
     const cart = await Cart.findOne({ userId: req.user._id }).populate("cartItems.productId");
 
@@ -39,14 +36,7 @@ export const addToCart = async (req, res) => {
         // Safely check for existing product in cart
         const existingItem = cart.cartItems.find(i => i?.productId?.toString() === productId.toString());
 
-        // if (existingItem) {
-        //     const newQty = existingItem.qty + qty;
-        //     existingItem.qty = Math.min(newQty, product.countInStock);
 
-        //     // existingItem.qty = qty; // or += qty based on your logic
-        // } else {
-        //     cart.cartItems.push({ productId, qty });
-        // }
         if (existingItem) {
             const newQty = existingItem.qty + qty;
 
