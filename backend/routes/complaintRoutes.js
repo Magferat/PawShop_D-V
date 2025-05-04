@@ -3,6 +3,7 @@ import {
   createComplaint,
   getMyComplaints,
   getAllComplaints,
+  getComplaintById,
   deleteComplaint,
 } from '../controllers/complaintController.js';
 
@@ -18,6 +19,8 @@ router.get('/mine', authenticate, getMyComplaints);
 
 // 🛡️ Admin can view all complaints with optional filters
 router.get('/', authenticate, authorizeAdmin, getAllComplaints);
+// 🛡️ Admin can view a specific complaint
+router.get('/:id', authenticate, authorizeAdmin, getComplaintById);
 
 // 🛡️ Admin can delete any complaint by ID
 router.delete('/:id', authenticate, authorizeAdmin, deleteComplaint);

@@ -29,10 +29,10 @@ import ProductDetails from "./pages/Products/ProductDetails.jsx";
 import Shop from "./pages/Products/Shop.jsx";
 
 import Petshop from "./pages/Pets/Petshop.jsx";
-import AddPet from "./pages/Pets/Addpet.jsx"; 
+import AddPet from "./pages/Pets/Addpet.jsx";
 import PetDetails from "./pages/Pets/PetDetails.jsx";
-import EditPet from "./pages/Pets/EditPet.jsx"; 
-import PetList from "./pages/Pets/PetList.jsx"; 
+import EditPet from "./pages/Pets/EditPet.jsx";
+import PetList from "./pages/Pets/PetList.jsx";
 
 import OwnerDetails from "./pages/Pets/PetOwner.jsx";
 
@@ -63,6 +63,18 @@ import EditPackagePage from "./pages/Admin/EditPackage.jsx";
 import AddPackagePage from "./pages/Admin/AddPackage.jsx";
 import AddServicePage from "./pages/Admin/AddService.jsx";
 
+// Complaint pages
+// import ComplaintForm from './pages/complaints/ComplaintForm';
+// import MyComplaints from './pages/complaints/MyComplaints';
+// import ComplaintListAdmin from './pages/complaints/ComplaintListAdmin';
+// import ComplaintDetails from './pages/complaints/ComplaintDetails';
+import ComplaintDetails from "./pages/Admin/ComplaintDetails.jsx";
+import ComplaintForm from "./pages/User/ComplaintForm.jsx";
+import ComplaintListAdmin from "./pages/Admin/ComplaintListAdmin.jsx";
+import MyComplaints from "./pages/User/MyComplaints.jsx";
+
+
+
 //These are all frontend routes
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -73,7 +85,7 @@ const router = createBrowserRouter(
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/productshop" element={<Shop />} />
       <Route path="/petshop" element={<Petshop />} />
-      
+
 
       {/* Registered users */}
       <Route path="" element={<PrivateRoute />}>
@@ -96,8 +108,10 @@ const router = createBrowserRouter(
         <Route path="/services/:serviceId" element={<ServiceDetailPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/appointments/:id" element={<AppointmentDetailsPage />} />
+        <Route path="/complaints/new" element={<ComplaintForm />} />
+        <Route path="/complaints/mine" element={<MyComplaints />} />
 
-      
+
       </Route>
 
       <Route path="/admin" element={<AdminRoute />}>
@@ -115,6 +129,8 @@ const router = createBrowserRouter(
         <Route path="addservice" element={<AddServicePage />} />
         <Route path="orders" element={<AdminOrderList />} />
         <Route path="order/:id" element={<AdminOrderDetails />} />
+        <Route path="/admin/complaints" element={<ComplaintListAdmin />} />
+        <Route path="/admin/complaints/:id" element={<ComplaintDetails />} />
       </Route>
     </Route>
   )
@@ -122,6 +138,6 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-      <RouterProvider router={router} />
+    <RouterProvider router={router} />
   </Provider>
 );

@@ -10,3 +10,5 @@ export const COUPON_URL = "/api/coupons";
 export const APPOINTMENT_URL = "/api/appointments";
 export const SERVICE_URL = "/api/services";
 export const CART_URL = "/api/cart";
+export const COMPLAINT_URL = "/api/complaints";
+

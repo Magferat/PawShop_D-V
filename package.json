@@ -24,9 +24,15 @@
     "exxpress": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
     "moment-timezone": "^0.5.48",
+<<<<<<< HEAD
+    "mongoose": "^7.8.7",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.10"
+=======
     "mongoose": "^7.8.6",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.9"
+>>>>>>> 95b76b65c214a19e93d1dcdf3e670910bf8ba39e
   },
   "repository": {
     "type": "git",

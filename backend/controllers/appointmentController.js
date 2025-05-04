@@ -2,7 +2,7 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import Appointment from "../models/appointmentModel.js";
 import Service from "../models/serviceModel.js";
 import moment from "moment-timezone";
-import UserCoupon from "../models/userCouponModel.js"; 
+import UserCoupon from "../models/userCouponModel.js";
 
 // Helper functions
 const timeToMinutes = (timeStr) => {

@@ -4,43 +4,43 @@ import mongoose from 'mongoose';
 
 // Create a new complaint (User only)
 const createComplaint = asyncHandler(async (req, res) => {
-    const {
-      complaintAgainst,
-      orderId,
-      username,
-      typeOfComplaint,
-      dateOfIncident,
-      description,
-    } = req.body;
-  
-    const submittedBy = req.user._id; // Automatically use authenticated user
-  
-    // Validate required fields
-    if (
-      !complaintAgainst ||
-      !typeOfComplaint ||
-      !dateOfIncident ||
-      !description ||
-      (complaintAgainst === 'product' && !orderId) ||
-      (complaintAgainst === 'user' && !username)
-    ) {
-      res.status(400);
-      throw new Error('All required fields must be provided correctly.');
-    }
-  
-    const complaint = await Complaint.create({
-      submittedBy,
-      complaintAgainst,
-      orderId,
-      username,
-      typeOfComplaint,
-      dateOfIncident,
-      description,
-    });
-  
-    res.status(201).json(complaint);
+  const {
+    complaintAgainst,
+    orderId,
+    username,
+    typeOfComplaint,
+    dateOfIncident,
+    description,
+  } = req.body;
+
+  const submittedBy = req.user._id; // Automatically use authenticated user
+
+  // Validate required fields
+  if (
+    !complaintAgainst ||
+    !typeOfComplaint ||
+    !dateOfIncident ||
+    !description ||
+    (complaintAgainst === 'product' && !orderId) ||
+    (complaintAgainst === 'user' && !username)
+  ) {
+    res.status(400);
+    throw new Error('All required fields must be provided correctly.');
+  }
+
+  const complaint = await Complaint.create({
+    submittedBy,
+    complaintAgainst,
+    orderId,
+    username,
+    typeOfComplaint,
+    dateOfIncident,
+    description,
   });
-  
+
+  res.status(201).json(complaint);
+});
+
 
 // Filter complaints
 const buildComplaintFilter = (query) => {
@@ -111,10 +111,27 @@ const deleteComplaint = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Complaint deleted successfully' });
 });
 
+// Get single complaint details (Admin only)
+const getComplaintById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid complaint ID' });
+  }
+  gi
+  const complaint = await Complaint.findById(id).populate('submittedBy', 'username email');
+
+  if (!complaint) {
+    return res.status(404).json({ message: 'Complaint not found' });
+  }
+
+  res.status(200).json(complaint);
+});
 
 export {
   createComplaint,
   getAllComplaints,
   getMyComplaints,
+  getComplaintById,
   deleteComplaint,
 };

@@ -13,7 +13,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   notes: { type: String },
   packageDuration: { type: Number, required: true },   //in minutes
-  googleEventId: { type: String }, 
+  googleEventId: { type: String },
   couponUsed: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'UserCoupon'
