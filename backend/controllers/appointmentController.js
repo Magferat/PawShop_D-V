@@ -2,8 +2,7 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import Appointment from "../models/appointmentModel.js";
 import Service from "../models/serviceModel.js";
 import moment from "moment-timezone";
-import UserCoupon from "../models/userCouponModel.js"; 
-import Coupon from "../models/couponModel.js";
+import UserCoupon from "../models/userCouponModel.js";
 
 // Helper functions
 const timeToMinutes = (timeStr) => {
@@ -12,7 +11,7 @@ const timeToMinutes = (timeStr) => {
 };
 
 const minutesToTime = (mins) => {
-  const h = String(Math.floor(mins / 60)).padStart(2, "0");
+  const h = String(Math.floor(mins / 60)).padStart(2, "0");  //padStart: Ensures the string is at least 2 characters long, adding a leading "0" if necessary (e.g., "2" becomes "02")
   const m = String(mins % 60).padStart(2, "0");
   return `${h}:${m}`;
 };
@@ -27,11 +26,12 @@ const minutesToTime = (mins) => {
 
 //   return { dayStart, dayEnd };
 // };
+
 const getDateRange = (dateStr) => {
   const tz = 'Asia/Dhaka';  // Bangladesh timezone
 
   const dayStart = moment.tz(dateStr, tz).startOf('day').toDate();
-  const dayEnd = moment.tz(dateStr, tz).endOf('day').toDate();
+  const dayEnd = moment.tz(dateStr, tz).endOf('day').toDate();             //dayEnd: Date("2025-05-04T23:59:59.999+06:00")
 
   return { dayStart, dayEnd };
 };
@@ -42,12 +42,14 @@ const generateAvailableSlots = async (service, packageDuration, date) => {
   const startMins = timeToMinutes(service.workingHours.start);
   const endMins = timeToMinutes(service.workingHours.end);
 
+  //Check any existing appointments for the service on the given date
   const existingAppointments = await Appointment.find({
     service: service._id,
     date: { $gte: dayStart, $lte: dayEnd },
     status: { $in: ["pending", "confirmed"] },
   });
 
+  //Array of booked time slots {start, end}
   const booked = existingAppointments.map((appt) => {
     const apptStart = timeToMinutes(appt.timeSlot);
     const apptDuration = appt.packageDuration || 0; // fallback
@@ -58,9 +60,9 @@ const generateAvailableSlots = async (service, packageDuration, date) => {
   });
 
   const slots = [];
-  for (let t = startMins; t + packageDuration <= endMins; t += 30) {
+  for (let t = startMins; t + packageDuration <= endMins; t += 30) {    //loops from startMins to endMins in 30-minute increments
     const end = t + packageDuration;
-    const overlaps = booked.some((b) => !(end <= b.start || t >= b.end));
+    const overlaps = booked.some((b) => !(end <= b.start || t >= b.end));  // Check if the current slot overlaps with any booked slots
     if (!overlaps) slots.push(minutesToTime(t));
   }
 
@@ -262,10 +264,8 @@ const handleCouponChange = asyncHandler(async (req, res) => {
   const appointment = await Appointment.findById(req.params.id).populate('service');
   if (!appointment) return res.status(404).json({ error: 'Appointment not found' });
 
-  // Check if coupon is already used in the appointment
   const couponUsed = appointment.couponUsed;
 
-  // Find the user coupon if it exists
   let userCoupon = null;
   if (couponUsed) {
     userCoupon = await UserCoupon.findOne({
@@ -275,16 +275,17 @@ const handleCouponChange = asyncHandler(async (req, res) => {
   }
 
   if (action === 'apply') {
-    // Handle apply action
     if (couponUsed)
       return res.status(400).json({ error: 'A coupon is already applied' });
 
-    // If user coupon exists, handle it
     userCoupon = await UserCoupon.findOne({
       _id: userCouponId,
       user: req.user._id,
     }).populate('couponTemplate');
     if (!userCoupon) return res.status(404).json({ error: 'Coupon not found for user' });
+
+    if (userCoupon.quantity <= 0)
+      return res.status(400).json({ error: 'No more uses left for this coupon' });
 
     // const coupon = userCoupon.couponTemplate;
     // const applicable = isCouponApplicable(coupon.templateCode, appointment.service.category);
@@ -294,49 +295,29 @@ const handleCouponChange = asyncHandler(async (req, res) => {
     appointment.couponUsed = userCoupon._id;
     userCoupon.quantity -= 1;
 
-    if (userCoupon.quantity <= 0) {
-      await userCoupon.deleteOne(); // Delete coupon if quantity is zero
-    } else {
-      await userCoupon.save();
-    }
-
+    await userCoupon.save();
     await appointment.save();
     return res.json({ message: 'Coupon applied successfully', appointment });
 
   } else if (action === 'remove') {
-    // Handle remove action
     if (!couponUsed)
       return res.status(400).json({ error: 'No coupon applied' });
 
-    // If the coupon has already been deleted from UserCoupon
-    if (!userCoupon) {
+    if (!userCoupon)
       return res.status(400).json({ error: 'Coupon has already been removed from your account' });
-    }
 
-    // Return coupon to user
-    const existing = await UserCoupon.findOne({
-      user: req.user._id,
-      couponTemplate: userCoupon.couponTemplate._id,
-    });
-
-    if (existing) {
-      existing.quantity += 1;
-      await existing.save();
-    } else {
-      await UserCoupon.create({
-        user: req.user._id,
-        couponTemplate: userCoupon.couponTemplate._id,
-        quantity: 1,
-      });
-    }
+    userCoupon.quantity += 1;
+    await userCoupon.save();
 
     appointment.couponUsed = undefined;
     await appointment.save();
     return res.json({ message: 'Coupon removed successfully', appointment });
+
   } else {
     return res.status(400).json({ error: 'Invalid action' });
   }
 });
+
 
 export {
   bookAppointment,

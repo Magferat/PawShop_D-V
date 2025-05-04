@@ -118,7 +118,7 @@ const getComplaintById = asyncHandler(async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: 'Invalid complaint ID' });
   }
-
+  gi
   const complaint = await Complaint.findById(id).populate('submittedBy', 'username email');
 
   if (!complaint) {
