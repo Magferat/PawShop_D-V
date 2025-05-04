@@ -85,16 +85,10 @@ const AppointmentDetailsPage = () => {
     const code = uc.couponTemplate.templateCode.toUpperCase();
     const category = service?.category.toLowerCase();
     return (
-<<<<<<< HEAD
-      (category === "grooming" && code.includes("GROOM")) ||
-      (category === "vet" && code.includes("VET"))
-=======
       uc.quantity > 0 && (
       (category === "grooming" && code.includes("GROOM")) ||
       (category === "vet" && code.includes("VET")))
->>>>>>> 95b76b65c214a19e93d1dcdf3e670910bf8ba39e
     );
-    
   });
 
   return (
@@ -163,11 +157,7 @@ const AppointmentDetailsPage = () => {
 
             {loadingCoupons ? (
               <p>Loading...</p>
-<<<<<<< HEAD
             ) : applicableCoupons?.length === 0 ? (
-=======
-            ) : applicableCoupons?.length === 0? (
->>>>>>> 95b76b65c214a19e93d1dcdf3e670910bf8ba39e
               <p>No applicable coupons available.</p>
             ) : (
               <ul className="space-y-4 max-h-80 overflow-y-auto">

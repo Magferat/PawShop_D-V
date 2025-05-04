@@ -19,7 +19,7 @@ export const appointmentApiSlice = apiSlice.injectEndpoints({
     cancelAppointment: builder.mutation({
       query: (id) => ({
         url: `${APPOINTMENT_URL}/${id}/cancel`,
-        method: "PUT",  // ✅ keep if your backend uses PUT
+        method: "PUT", 
       }),
       invalidatesTags: ["Appointments"],
     }),
@@ -61,7 +61,7 @@ export const appointmentApiSlice = apiSlice.injectEndpoints({
         method: 'PUT',
         body: { action, userCouponId },
       }),
-      invalidatesTags: ['Appointment', 'UserCoupon'], // Invalidate relevant cache if needed
+      invalidatesTags: ['Appointment', 'UserCoupons'], // Invalidate relevant cache
     }),
 
 
