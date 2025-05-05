@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const UserMenu = () => {
+  const { userInfo } = useSelector((state) => state.auth);
   return (
     <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-md mt-6">
       <h3 className="text-xl font-semibold text-pink-600 mb-4 text-center">🔗 Quick Access</h3>
@@ -29,6 +31,42 @@ const UserMenu = () => {
             🛍️ View Purchase History
           </Link>
         </li>
+
+        {userInfo && !userInfo.isAdmin && (
+          <>
+            <li>
+              <Link
+                to="/complaints/mine"
+                className="block text-center bg-fuchsia-200 hover:bg-fuchsia-300 text-fuchsia-800 font-medium py-2 px-4 rounded-lg transition"
+              >
+                📜 My Complaints
+              </Link>
+
+
+            </li>
+            <li>
+              <Link
+                to="/complaints/new"
+                className="block text-center bg-fuchsia-200 hover:bg-fuchsia-300 text-fuchsia-800 font-medium py-2 px-4 rounded-lg transition"
+              >
+                📝 File a Complaint
+              </Link>
+            </li></>
+        )}
+        {userInfo && userInfo.isAdmin && (
+          <>
+            <li>
+              <Link
+                to="/admin/complaints" className="block text-center bg-fuchsia-200 hover:bg-fuchsia-300 text-fuchsia-800 font-medium py-2 px-4 rounded-lg transition"
+              >
+                📂 Complaints
+              </Link>
+
+
+
+
+            </li></>
+        )}
       </ul>
     </div>
   );

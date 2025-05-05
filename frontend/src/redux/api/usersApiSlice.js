@@ -1,6 +1,7 @@
 import { apiSlice } from "./apiSlice";
 import { USERS_URL } from "../constants";
 import { PET_URL } from "../constants";
+import { UPLOAD_URL } from "../constants";
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -81,6 +82,17 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+
+        // Upload image (returns the URL of the uploaded image)
+        uploadImage: builder.mutation({
+          query: (formData) => ({
+            url: `${UPLOAD_URL}`, // endpoint for image upload
+            method: "POST",
+            body: formData, // send FormData object for image upload
+          }),
+        }),
+
+    
   }),
 });
 
@@ -96,4 +108,5 @@ export const {
   useCreateUserReviewMutation,
   useDeleteUserReviewMutation,
   useGetPublicUserProfileQuery,
+  useUploadImageMutation,
 } = userApiSlice;

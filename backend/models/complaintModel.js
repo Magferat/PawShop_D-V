@@ -12,7 +12,7 @@ const complaintSchema = new mongoose.Schema({
       required: true
     },
     orderId: String,
-    username: String,
+    email: String,
     typeOfComplaint: {
       type: String,
       required: true
@@ -31,8 +31,8 @@ const complaintSchema = new mongoose.Schema({
     if (this.complaintAgainst === 'product' && !this.orderId) {
       this.invalidate('orderId', 'Order ID is required for product complaints.');
     }
-    if (this.complaintAgainst === 'user' && !this.username) {
-      this.invalidate('username', 'Username is required for user complaints.');
+    if (this.complaintAgainst === 'user' && !this.email) {
+      this.invalidate('username', 'Email is required for user complaints.');
     }
     next();
   });

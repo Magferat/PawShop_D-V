@@ -19,7 +19,8 @@ import moment from "moment";
 // import HeartIcon from "./HeartIcon";
 import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
-import { addToCart } from "../../redux/features/cart/cartSlice";
+// import { addToCart } from "../../redux/features/cart/cartSlice";
+import { useAddToCartMutation } from "../../redux/features/cart/cartApiSlice";
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
@@ -29,6 +30,8 @@ const ProductDetails = () => {
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+
+  const[addToCartApi] = useAddToCartMutation();
 
   const {
     data: product,
@@ -58,12 +61,22 @@ const ProductDetails = () => {
     }
   };
 
-  const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty }));
-    toast.success("Item added successfully", {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 2000,
-    });
+  // const addToCartHandler = () => {
+  //   dispatch(addToCart({ ...product, qty }));
+  //   toast.success("Item added successfully", {
+  //     position: toast.POSITION.TOP_RIGHT,
+  //     autoClose: 2000,
+  //   });
+  // };
+
+  const addToCartHandler = async () => {
+    try {
+      await addToCartApi({ productId: product._id, qty }).unwrap();
+      toast.success("Added to cart");
+      // navigate("/cart"); // or /productshop if that's your flow
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to add to cart");
+    }
   };
 
   return (
@@ -140,9 +153,10 @@ const ProductDetails = () => {
                   />
   
                   {product.countInStock > 0 && (
+                    <div>
                     <select
                       value={qty}
-                      onChange={(e) => setQty(e.target.value)}
+                      onChange={(e) => setQty(Number(e.target.value))}
                       className="p-2 w-[6rem] border border-gray-300 rounded-lg text-gray-700"
                     >
                       {[...Array(product.countInStock).keys()].map((x) => (
@@ -151,6 +165,7 @@ const ProductDetails = () => {
                         </option>
                       ))}
                     </select>
+                  </div>
                   )}
   
                   <button

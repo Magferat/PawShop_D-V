@@ -1,150 +1,58 @@
-// // frontend/src/pages/Orders/OrderDetails.jsx
 
-// import { useParams } from "react-router-dom";
-// import { useGetOrderDetailsQuery } from "../../redux/api/orderApiSlice";
-// import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
-// // import { addToCart } from "../../redux/features/cartSlice"; // adjust path if needed
-// import { addToCart } from "../../redux/features/cart/cartSlice";
-
-// const OrderDetails = () => {
-//     const { id: orderId } = useParams();
-//     const { data: order, isLoading, error } = useGetOrderDetailsQuery(orderId);
-//     const dispatch = useDispatch();
-//     const navigate = useNavigate();
-
-//     const handleReorder = () => {
-
-//         order.orderItems.forEach((item) => {
-
-//             const qty = item.qty;
-//             dispatch(addToCart({ ...item, qty }));
-
-//         });
-//         navigate("/cart");
-//     };
-
-
-
-//     return (
-//         <div className="max-w-4xl mx-auto p-6 bg-white shadow rounded">
-//             <h1 className="text-2xl font-bold mb-4 text-green-700">Order Details</h1>
-
-//             {isLoading ? (
-//                 <p>Loading...</p>
-//             ) : error ? (
-//                 <p className="text-red-500">Error: {error?.data?.message || error.message}</p>
-//             ) : (
-//                 <>
-//                     <div>
-//                         <div>
-//                             <p className="mb-2 text-gray-700">
-//                                 <strong>Order ID:</strong> {order._id}
-//                             </p>
-//                             <p className="mb-2 text-gray-700">
-//                                 <strong>Order Date:</strong> {order.createdAt?.substring(0, 10)}
-//                             </p>
-//                             <p className="mb-4 text-gray-700">
-//                                 <strong>Total Price:</strong> {order.totalPrice} BDT
-//                             </p>
-
-//                         </div>
-//                         <div>
-//                             <button
-//                                 onClick={() => handleReorder()}
-//                                 className="mt-6 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded shadow"
-//                             >
-//                                 Reorder
-//                             </button>
-
-//                         </div>
-//                     </div>
-
-//                     <h2 className="text-xl font-semibold text-green-600 mb-2">Ordered Items:</h2>
-//                     <ul className="space-y-2">
-//                         {order.orderItems.map((item, index) => (
-//                             <li
-//                                 key={index}
-//                                 className="border p-4 rounded-lg flex justify-between items-center"
-//                             >
-//                                 <div>
-//                                     <p className="font-medium">{item.name}</p>
-//                                     <p className="text-sm text-gray-600">
-//                                         Quantity: {item.qty} x {item.price} BDT
-//                                     </p>
-//                                 </div>
-//                                 <p className="font-bold text-green-700">
-//                                     {(item.qty * item.price).toFixed(2)} BDT
-//                                 </p>
-//                             </li>
-//                         ))}
-//                     </ul>
-//                 </>
-//             )}
-//         </div>
-//     );
-// };
-
-// export default OrderDetails;
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useGetOrderDetailsQuery } from "../../redux/api/orderApiSlice";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../redux/features/cart/cartSlice";
+import { toast } from "react-toastify";
 import jsPDF from "jspdf";
-// import { Link } from "react-router-dom";
-// import MyOrders from "./MyOrders";
+import moment from 'moment';
+import { useAddToCartMutation, } from "../../redux/features/cart/cartApiSlice";
+
+
 
 const OrderDetails = () => {
     const { id: orderId } = useParams();
     const { data: order, isLoading, error } = useGetOrderDetailsQuery(orderId);
-    const dispatch = useDispatch();
+    const location = useLocation();
     const navigate = useNavigate();
-    const handleReorder = () => {
-        order.orderItems.forEach((item) => {
-            const qty = item.qty;
-            // dispatch(addToCart({ ...item, qty }));
-            dispatch(addToCart({ ...item, qty, _id: item.product }));
+    const isFromPlaceOrder = location.state?.fromPlaceOrder || false;
 
-        });
-        navigate("/cart");
+    const deliveryFrom = moment().add(2, 'days').format('D MMMM YYYY');
+    const deliveryTo = moment().add(6, 'days').format('D MMMM YYYY');
+    const [addToCart] = useAddToCartMutation();
+
+    const handleReorder = async () => {
+        try {
+            for (const item of order.orderItems) {
+                const qty = item.qty;
+
+                // If item.product is an object, adjust accordingly
+                const productId = item.product._id || item.product;
+
+                const clampedQty = Math.max(1, Math.min(qty, item.product.countInStock || 100)); // default stock fallback
+
+                await addToCart({
+                    productId,
+                    qty: clampedQty,
+                });
+            }
+
+            // await refetch();
+            navigate("/cart");
+
+        } catch (error) {
+            console.error("Reorder failed:", error);
+            toast.error("Failed to reorder items.");
+        }
     };
-    // const handleReorder = () => {
-    //     order.orderItems.forEach((item) => {
-    //         const qty = item.qty;
-    //         // Use item.product as _id for the cart to work with backend later
-    //         dispatch(addToCart({ ...item, qty, _id: item.product }));
-    //     });
-    //     navigate("/cart");
-    // };
-
-    // const handleDownloadInvoice = () => {
-    //     const doc = new jsPDF();
 
 
-    //     doc.setFontSize(18);
-    //     doc.text("PawShop Invoice", 14, 22);
-    //     doc.setFontSize(12);
-    //     doc.text(`Order ID: ${order._id}`, 14, 30);
-    //     doc.text(`Username: ${order.user.username}`, 14, 38);
-    //     doc.text(`Email: ${order.user.email}`, 14, 46);
-    //     doc.text(`Address: ${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.postalCode}, ${order.shippingAddress.country}`, 14, 54);
+    const handleGoBack = () => {
+        if (isFromPlaceOrder) {
+            navigate("/"); // Or wherever you want to go after new order
+        } else {
+            navigate(-1); // Go back to previous page (order list)
+        }
+    };
 
-    //     let y = 70;
-    //     order.orderItems.forEach((item, i) => {
-    //         doc.text(`${i + 1}. ${item.name} - ${item.qty} x ${item.price} = ${item.qty * item.price} BDT`, 14, y);
-    //         y += 10;
-    //     });
-
-    //     y += 10;
-    //     doc.text(`Items Price: ${order.itemsPrice} BDT`, 14, y);
-    //     doc.text(`Shipping: ${order.shippingPrice} BDT`, 14, y + 10);
-    //     doc.text(`Tax: ${order.taxPrice} BDT`, 14, y + 20);
-    //     doc.text(`Total: ${order.totalPrice} BDT`, 14, y + 30);
-
-    //     doc.text(`Points Earned: ${order.pointsEarned}`, 14, y + 40);
-
-    //     doc.save(`Invoice_${order._id}.pdf`);
-    // };
     const handleDownloadInvoice = () => {
         const doc = new jsPDF();
 
@@ -168,7 +76,6 @@ const OrderDetails = () => {
             54
         );
 
-        // Right Column: Pricing Info (align to ~ pageWidth - 80)
         const rightX = pageWidth - 80;
         doc.text(`Items Price: ${order.itemsPrice} BDT`, rightX, 30);
         doc.text(`Shipping: ${order.shippingPrice} BDT`, rightX, 38);
@@ -204,8 +111,11 @@ const OrderDetails = () => {
 
 
     return (
-        <div className="max-w-5xl mx-auto p-6 bg-white shadow rounded">
-            <div className="flex justify-between items-center mb-6">
+
+        <div className="font-serif max-w-5xl mx-auto p-6 bg-white shadow rounded 
+            
+            ">
+            <div className="flex justify-between items-center mb-6 ">
                 <h1 className="text-2xl font-bold text-green-700">Order Details</h1>
                 {/* <div className="flex justify-end mt-8"> */}
                 <div className="">
@@ -216,12 +126,20 @@ const OrderDetails = () => {
                     >
                         Download Invoice
                     </button>
-                    <button
+                    {/* <button
                         onClick={handleReorder}
                         className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded shadow flex justify-end mt-8"
                     >
                         Reorder
-                    </button>
+                    </button> */}
+                    {!isFromPlaceOrder && (
+                        <button
+                            onClick={handleReorder}
+                            className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded shadow flex justify-end mt-8"
+                        >
+                            Reorder
+                        </button>
+                    )}
                 </div>
 
 
@@ -249,12 +167,19 @@ const OrderDetails = () => {
                                 day: "numeric",
                             })}
                             <br />
-                            {new Date(order.createdAt).toLocaleTimeString("en-US", {
+                            <strong>Time : </strong> {new Date(order.createdAt).toLocaleTimeString("en-US", {
                                 hour: "numeric",
                                 minute: "2-digit",
                                 hour12: true,
                             })}
                         </p>
+                        {isFromPlaceOrder && (
+                            <p className="text-md mt-4">
+                                <strong> Expected Delivery: </strong><span className="">{deliveryFrom}</span> – <span className="">{deliveryTo}</span>
+                            </p>
+
+                        )}
+
                         <p><strong>Tax:</strong> {order.taxPrice} BDT</p>
                         <p><strong>Shipping Price:</strong> {order.shippingPrice} BDT</p>
                         <p><strong>Items Price:</strong> {order.itemsPrice} BDT</p>
@@ -292,12 +217,44 @@ const OrderDetails = () => {
                         ))}
                     </div>
                     <div>
-                        <Link
+                        {/* <Link
                             to="/my-orders"
                             className="text-pink-700 font-semibold hover:underline mb-4 inline-block"
                         >
                             &larr; Go Back
-                        </Link>                    </div>
+                        </Link>                     */}
+
+
+                        {!isFromPlaceOrder && (
+                            <Link
+                                onClick={handleGoBack}
+                                // to="/my-orders"
+                                className="text-green-700 font-semibold hover:underline mb-4 inline-block"
+                            >
+                                &larr; Go Back
+                            </Link>
+
+                        )}
+
+                        {isFromPlaceOrder && (
+                            <button
+                            // onClick={handleReorder}
+
+                            >
+                                <Link
+                                    // onClick={handleGoBack}
+                                    to="/productshop"
+                                    className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded shadow flex justify-end mt-8"
+                                >
+                                    &larr; Go To Shop
+                                </Link>
+                                {/* Reorder */}
+                            </button>
+
+                        )}
+
+
+                    </div>
                 </>
             )}
         </div>
