@@ -8,9 +8,7 @@ import { useNavigate } from "react-router-dom";
 const ComplaintDetails = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    // console.log(id);
     const { data: complaint, isLoading, refetch } = useGetComplaintByIdQuery(id);
-    // console.log(complaint);
     const [deleteComplaint] = useDeleteComplaintMutation();
 
     const handleDelete = async (id) => {
