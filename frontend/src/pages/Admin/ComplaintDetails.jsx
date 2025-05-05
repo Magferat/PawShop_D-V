@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 const ComplaintDetails = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    // console.log(id);
+    console.log(id);
     const { data: complaint, isLoading, refetch } = useGetComplaintByIdQuery(id);
-    // console.log(complaint);
+    console.log(complaint);
     const [deleteComplaint] = useDeleteComplaintMutation();
 
     const handleDelete = async (id) => {
@@ -36,7 +36,7 @@ const ComplaintDetails = () => {
                 <div className="bg-white p-4 rounded shadow">
                     <p><strong>Complaint Against:</strong> {complaint.complaintAgainst}</p>
                     <p><strong>Order ID:</strong> {complaint.orderId || "N/A"}</p>
-                    <p><strong>Username:</strong> {complaint.username || "N/A"}</p>
+                    <p><strong>Email:</strong> {complaint.email || "N/A"}</p>
                     <p><strong>Type:</strong> {complaint.typeOfComplaint}</p>
                     <p><strong>Date of Incident:</strong> {new Date(complaint.dateOfIncident).toLocaleDateString()}</p>
                     <p><strong>Description:</strong> {complaint.description}</p>

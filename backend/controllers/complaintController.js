@@ -7,7 +7,7 @@ const createComplaint = asyncHandler(async (req, res) => {
   const {
     complaintAgainst,
     orderId,
-    username,
+    email,
     typeOfComplaint,
     dateOfIncident,
     description,
@@ -22,7 +22,7 @@ const createComplaint = asyncHandler(async (req, res) => {
     !dateOfIncident ||
     !description ||
     (complaintAgainst === 'product' && !orderId) ||
-    (complaintAgainst === 'user' && !username)
+    (complaintAgainst === 'user' && !email)
   ) {
     res.status(400);
     throw new Error('All required fields must be provided correctly.');
@@ -32,7 +32,7 @@ const createComplaint = asyncHandler(async (req, res) => {
     submittedBy,
     complaintAgainst,
     orderId,
-    username,
+    email,
     typeOfComplaint,
     dateOfIncident,
     description,
@@ -118,7 +118,7 @@ const getComplaintById = asyncHandler(async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: 'Invalid complaint ID' });
   }
-  gi
+
   const complaint = await Complaint.findById(id).populate('submittedBy', 'username email');
 
   if (!complaint) {
