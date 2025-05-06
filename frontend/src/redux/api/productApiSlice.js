@@ -1,13 +1,17 @@
 import { PRODUCT_URL, UPLOAD_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
+console.log("Product URL", PRODUCT_URL);
 
 export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
-      query: ({ keyword }) => ({
-        url: `${PRODUCT_URL}`,
-        params: { keyword },
-      }),
+      query: ({ keyword }) => {
+        console.log("Product URL built:", `${PRODUCT_URL} with keyword:`, keyword);
+        return {
+          url: `${PRODUCT_URL}`,
+          params: { keyword },
+        };
+      },
       keepUnusedDataFor: 5,
       providesTags: ["Products"],
     }),

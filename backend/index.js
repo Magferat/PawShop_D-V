@@ -19,6 +19,8 @@ import appointmentRoutes from "./routes/appointmentRoutes.js";
 import complaintRoutes from "./routes/complaintRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 
+import cors from "cors";
+
 dotenv.config();
 const port = process.env.PORT || 5000;
 
@@ -26,6 +28,7 @@ connectDB();
 
 const app = express();
 
+app.use(cors({ origin: ['http://localhost:5173'], credentials: true }));   //add production url here later
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
