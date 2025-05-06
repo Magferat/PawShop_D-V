@@ -25,7 +25,7 @@ const UserMenu = () => {
         </li>
         <li>
           <Link
-            to="/user/purchase-history"
+            to="/my-orders"
             className="block text-center bg-fuchsia-200 hover:bg-fuchsia-300 text-fuchsia-800 font-medium py-2 px-4 rounded-lg transition"
           >
             🛍️ View Purchase History

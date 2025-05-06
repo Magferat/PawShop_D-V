@@ -65,12 +65,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-console.log("Cloudinary config:", {
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET ? '***' : 'MISSING',
-  nodeenv: process.env.NODE_ENV,
-});
+// console.log("Cloudinary config:", {
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET ? '***' : 'MISSING',
+//   nodeenv: process.env.NODE_ENV,
+// });
 
 // ✅ Cloudinary Storage Setup
 const storage = new CloudinaryStorage({
