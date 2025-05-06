@@ -124,7 +124,7 @@ const Shipping = () => {
 
     return (
         <div
-            className=" bg-[url('../../../../uploads/kiki.jpg')] 
+            className=" bg-[url('https://res.cloudinary.com/dtzk3edsz/image/upload/v1746558217/kiki_hmvwaw.jpg')] 
             bg-contain bg-no-repeat bg-right h-screen w-full"
         >
             <div className="font-serif text-2xl container mt-5 my-10">

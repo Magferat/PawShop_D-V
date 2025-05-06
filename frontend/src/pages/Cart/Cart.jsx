@@ -340,7 +340,7 @@ const Cart = () => {
         <>
             {cartItems.length === 0 ? (
                 <div
-                    className="bg-[url('../../../../uploads/my-neighbor-totoro-uhd-4k-wallpaper.jpg')] bg-cover bg-center bg-no-repeat h-screen w-full
+                    className="bg-[url('https://res.cloudinary.com/dtzk3edsz/image/upload/v1746558111/my-neighbor-totoro-uhd-4k-wallpaper_li5j1m.jpg')] bg-cover bg-center bg-no-repeat h-screen w-full
                     "
                 >
                     <div className="text-3xl pt-32 ml-80 pl-64">
