@@ -60,22 +60,50 @@ const Profile = () => {
     }
   };
 
-  const uploadFileHandler = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("image", file);
+  // const uploadFileHandler = async (e) => {
+  //   const file = e.target.files[0];
+  //   const formData = new FormData();
+  //   formData.append("image", file);
 
-    try {
-      setUploading(true);
-      const res = await uploadImage(formData).unwrap();
-      setImage(res.image); // assuming the response returns { image: url }
-      toast.success("Image uploaded successfully");
-    } catch (error) {
-      toast.error("Image upload failed");
-    } finally {
-      setUploading(false);
-    }
-  };
+  //   try {
+  //     setUploading(true);
+  //     const res = await uploadImage(formData).unwrap();
+  //     setImage(res.image); // assuming the response returns { image: url }
+  //     toast.success("Image uploaded successfully");
+  //   } catch (error) {
+  //     toast.error("Image upload failed");
+  //   } finally {
+  //     setUploading(false);
+  //   }
+  // };
+
+    const uploadFileHandler = async (e) => {
+      const file = e.target.files[0];
+    
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "unsigned_pets"); // your unsigned preset
+    
+      try {
+        const res = await fetch("https://api.cloudinary.com/v1_1/dtzk3edsz/image/upload", {
+          method: "POST",
+          body: formData,
+        });
+    
+        const data = await res.json();
+        console.log(data); // You can check what it returns!
+    
+        if (data.secure_url) {
+          setImage(data.secure_url); // store the Cloudinary image URL
+          toast.success("Image uploaded");
+        } else {
+          toast.error("Cloudinary upload failed");
+        }
+      } catch (err) {
+        console.error("Cloudinary upload error", err);
+        toast.error("Image upload failed");
+      }
+    };
 
   return (
     <div className="min-h-screen flex items-start justify-center bg-gradient-to-br from-rose-100 to-pink-200 px-4 py-10">
