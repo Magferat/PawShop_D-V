@@ -28,7 +28,7 @@ connectDB();
 
 const app = express();
 
-app.use(cors({ origin: ['http://localhost:5173'], credentials: true }));   //add production url here later
+app.use(cors({ origin: ['http://localhost:5173', 'https://471petshop-3.vercel.app'], credentials: true }));   //add production url here later
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
