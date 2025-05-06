@@ -54,6 +54,7 @@ import express from "express";
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "cloudinary";
+import cors from "cors";  // ✅ add this
 
 // ✅ Cloudinary Config
 cloudinary.config({
@@ -80,8 +81,24 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 const router = express.Router();
 
+// ✅ Apply CORS locally for this route
+const allowedOrigins = ['http://localhost:5173', 'https://471petshop-3.vercel.app'];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+
+// ✅ Handle preflight requests
+router.options("/", cors(corsOptions));
+
 // ✅ Upload Route
-router.post("/", upload.single("image"), (req, res) => {
+router.post("/", cors(corsOptions), upload.single("image"), (req, res) => {
   if (req.file) {
     return res.status(200).send({
       message: "Image uploaded successfully",
@@ -92,7 +109,6 @@ router.post("/", upload.single("image"), (req, res) => {
     return res.status(400).send({ message: "No image file provided or error occurred" });
   }
 });
-
 
 export default router;
 
