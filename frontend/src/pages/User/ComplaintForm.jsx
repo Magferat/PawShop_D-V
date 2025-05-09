@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const ComplaintForm = () => {
     const [complaintAgainst, setComplaintAgainst] = useState("product");
     const [orderId, setOrderId] = useState("");
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [typeOfComplaint, setTypeOfComplaint] = useState("");
     const [dateOfIncident, setDateOfIncident] = useState("");
     const [description, setDescription] = useState("");
@@ -18,7 +18,7 @@ const ComplaintForm = () => {
             await createComplaint({
                 complaintAgainst,
                 orderId: complaintAgainst === "product" ? orderId : undefined,
-                username: complaintAgainst === "user" ? username : undefined,
+                email: complaintAgainst === "user" ? email : undefined,
                 typeOfComplaint,
                 dateOfIncident,
                 description,
@@ -56,9 +56,9 @@ const ComplaintForm = () => {
             {complaintAgainst === "user" && (
                 <input
                     type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Email of complaint against"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full border p-2 rounded"
                     required
                 />

@@ -19,12 +19,22 @@ import appointmentRoutes from "./routes/appointmentRoutes.js";
 import complaintRoutes from "./routes/complaintRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 
+import cors from "cors";
+
 dotenv.config();
 const port = process.env.PORT || 5000;
 
 connectDB();
 
 const app = express();
+
+app.use(cors({ 
+    origin: ['http://localhost:5173', 'https://471petshop-3.vercel.app'], 
+    credentials: true 
+  }));
+  
+// ✅ Handle preflight requests globally
+app.options('*', cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useGetOrderDetailsQuery } from "../../redux/api/orderApiSlice";
-import { addToCart } from "../../redux/features/Cart/cartSlice";
+import { addToCart } from "../../redux/features/cart/cartSlice";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 

@@ -94,7 +94,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { saveShippingAddress } from "../../redux/features/Cart/cartSlice";
+import { saveShippingAddress } from "../../redux/features/cart/cartSlice";
 import { Link } from "react-router-dom";
 
 const Shipping = () => {
@@ -124,7 +124,7 @@ const Shipping = () => {
 
     return (
         <div
-            className=" bg-[url('../../../../uploads/kiki.jpg')] 
+            className=" bg-[url('https://res.cloudinary.com/dtzk3edsz/image/upload/v1746558217/kiki_hmvwaw.jpg')] 
             bg-contain bg-no-repeat bg-right h-screen w-full"
         >
             <div className="font-serif text-2xl container mt-5 my-10">

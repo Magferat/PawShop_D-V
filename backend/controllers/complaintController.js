@@ -7,7 +7,7 @@ const createComplaint = asyncHandler(async (req, res) => {
   const {
     complaintAgainst,
     orderId,
-    username,
+    email,
     typeOfComplaint,
     dateOfIncident,
     description,
@@ -22,7 +22,7 @@ const createComplaint = asyncHandler(async (req, res) => {
     !dateOfIncident ||
     !description ||
     (complaintAgainst === 'product' && !orderId) ||
-    (complaintAgainst === 'user' && !username)
+    (complaintAgainst === 'user' && !email)
   ) {
     res.status(400);
     throw new Error('All required fields must be provided correctly.');
@@ -32,7 +32,7 @@ const createComplaint = asyncHandler(async (req, res) => {
     submittedBy,
     complaintAgainst,
     orderId,
-    username,
+    email,
     typeOfComplaint,
     dateOfIncident,
     description,

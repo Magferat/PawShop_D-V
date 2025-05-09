@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-
-
 const HomePage = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -11,11 +9,11 @@ const HomePage = () => {
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-between px-6 py-20 max-w-6xl mx-auto">
         <div className="md:w-1/2 text-center md:text-left space-y-6">
-        {userInfo && (
-          <h2 className="text-5xl md:text-6xl font-extrabold text-green-700 leading-tight">
-            Hello, {userInfo.username}!
-          </h2>
-        )}
+          {userInfo && (
+            <h2 className="text-5xl md:text-6xl font-extrabold text-green-700 leading-tight">
+              Hello, {userInfo.username}!
+            </h2>
+          )}
           <h1 className="text-5xl md:text-6xl font-extrabold text-green-700 leading-tight">
             Welcome to PawShop
           </h1>
@@ -59,8 +57,8 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Footer-like CTA */}
-      <div className="py-12 text-center bg-green-50 mt-auto">
+            {/* Footer-like CTA */}
+            <div className="py-12 text-center bg-green-50 mt-auto">
         <h3 className="text-2xl font-bold text-green-700 mb-4">
           Ready to find your new best friend?
         </h3>
@@ -71,6 +69,50 @@ const HomePage = () => {
           Browse Pets
         </Link>
       </div>
+
+      {/* Reviews Section */}
+      <section className="py-20 bg-pink-50">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold text-green-700 mb-12">What Our Customers Are Saying</h2>
+          <div className="space-y-8">
+            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+              <p className="text-xl text-gray-700 italic">"PawShop made adopting my new furry friend so easy. The process was smooth and I found the perfect match for our family!"</p>
+              <h4 className="mt-4 text-lg font-semibold text-green-600">Sarah W.</h4>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+              <p className="text-xl text-gray-700 italic">"Amazing quality products! My pets love their new toys and treats from PawShop. Highly recommend!"</p>
+              <h4 className="mt-4 text-lg font-semibold text-green-600">John D.</h4>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+              <p className="text-xl text-gray-700 italic">"The grooming and vet services were top-notch! My dog looks and feels amazing after her spa day!"</p>
+              <h4 className="mt-4 text-lg font-semibold text-green-600">Emily S.</h4>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Achievements Section */}
+      <section className="py-20 bg-yellow-50">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold text-green-700 mb-12">Our Achievements</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
+              <h3 className="text-3xl font-bold text-green-700">500+</h3>
+              <p className="text-lg text-gray-700">Happy Adoptions</p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
+              <h3 className="text-3xl font-bold text-green-700">200+</h3>
+              <p className="text-lg text-gray-700">Fostered</p>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
+              <h3 className="text-3xl font-bold text-green-700">100+</h3>
+              <p className="text-lg text-gray-700">Trusted Customers</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+
     </div>
   );
 };

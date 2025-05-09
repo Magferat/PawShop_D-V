@@ -53,23 +53,53 @@ const AdminProductUpdate = () => {
     }
   }, [productData]);
   console.log("Selected Category ID:", category);
-  const uploadFileHandler = async (e) => {
-    const formData = new FormData();
-    formData.append("image", e.target.files[0]);
-    try {
-      const res = await uploadProductImage(formData).unwrap();
-      toast.success("Item added successfully", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
-      setImage(res.image);
-    } catch (err) {
-      toast.success("Item added successfully", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
-    }
-  };
+
+  
+  // const uploadFileHandler = async (e) => {
+  //   const formData = new FormData();
+  //   formData.append("image", e.target.files[0]);
+  //   try {
+  //     const res = await uploadProductImage(formData).unwrap();
+  //     toast.success("Item added successfully", {
+  //       position: toast.POSITION.TOP_RIGHT,
+  //       autoClose: 2000,
+  //     });
+  //     setImage(res.image);
+  //   } catch (err) {
+  //     toast.success("Item added successfully", {
+  //       position: toast.POSITION.TOP_RIGHT,
+  //       autoClose: 2000,
+  //     });
+  //   }
+  // };
+
+    const uploadFileHandler = async (e) => {
+      const file = e.target.files[0];
+    
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "unsigned_pets"); // your unsigned preset
+    
+      try {
+        const res = await fetch("https://api.cloudinary.com/v1_1/dtzk3edsz/image/upload", {
+          method: "POST",
+          body: formData,
+        });
+    
+        const data = await res.json();
+        console.log(data); // You can check what it returns!
+    
+        if (data.secure_url) {
+          setImage(data.secure_url); // store the Cloudinary image URL
+          toast.success("Image uploaded");
+        } else {
+          toast.error("Cloudinary upload failed");
+        }
+      } catch (err) {
+        console.error("Cloudinary upload error", err);
+        toast.error("Image upload failed");
+      }
+    };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -167,7 +197,7 @@ const AdminProductUpdate = () => {
                   <label htmlFor="name">Name</label> <br />
                   <input
                     type="text"
-                    className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white mr-[5rem]"
+                    className="p-4 mb-3 w-[30rem] border rounded-lg text-black mr-[5rem]"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
@@ -177,7 +207,7 @@ const AdminProductUpdate = () => {
                   <label htmlFor="name block">Price</label> <br />
                   <input
                     type="number"
-                    className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white "
+                    className="p-4 mb-3 w-[30rem] border rounded-lg text-black "
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                   />
@@ -190,7 +220,7 @@ const AdminProductUpdate = () => {
                   <input
                     type="number"
                     min="1"
-                    className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white mr-[5rem]"
+                    className="p-4 mb-3 w-[30rem] border rounded-lg text-black mr-[5rem]"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                   />
@@ -199,7 +229,7 @@ const AdminProductUpdate = () => {
                   <label htmlFor="name block">Brand</label> <br />
                   <input
                     type="text"
-                    className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white "
+                    className="p-4 mb-3 w-[30rem] border rounded-lg text-black "
                     value={brand}
                     onChange={(e) => setBrand(e.target.value)}
                   />
@@ -211,7 +241,7 @@ const AdminProductUpdate = () => {
               </label>
               <textarea
                 type="text"
-                className="p-2 mb-3 bg-[#101011]  border rounded-lg w-[95%] text-white"
+                className="p-2 mb-3 border rounded-lg w-[95%] text-black"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
@@ -221,7 +251,7 @@ const AdminProductUpdate = () => {
                   <label htmlFor="name block">Count In Stock</label> <br />
                   <input
                     type="number"
-                    className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white "
+                    className="p-4 mb-3 w-[30rem] border rounded-lg text-black"
                     value={stock}
                     onChange={(e) => setStock(e.target.value)}
                   />
@@ -231,7 +261,7 @@ const AdminProductUpdate = () => {
                   <label htmlFor="">Category</label> <br />
                   <select
                     placeholder="Choose Category"
-                    className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white mr-[5rem]"
+                    className="p-4 mb-3 w-[30rem] border rounded-lg text-black mr-[5rem]"
                     onChange={(e) => setCategory(e.target.value)}
                     value={category}
                   >

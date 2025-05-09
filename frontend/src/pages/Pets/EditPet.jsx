@@ -54,17 +54,47 @@ const EditPet = () => {
     }
   }, [petData]);
 
+  // const uploadFileHandler = async (e) => {
+  //   const formData = new FormData();
+  //   formData.append("image", e.target.files[0]);
+  //   try {
+  //     const res = await uploadPetImage(formData).unwrap();
+  //     setImage(res.image);
+  //     toast.success("Image uploaded");
+  //   } catch (err) {
+  //     toast.error("Image upload failed");
+  //   }
+  // };
+
+
   const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+  
     const formData = new FormData();
-    formData.append("image", e.target.files[0]);
+    formData.append("file", file);
+    formData.append("upload_preset", "unsigned_pets"); // your unsigned preset
+  
     try {
-      const res = await uploadPetImage(formData).unwrap();
-      setImage(res.image);
-      toast.success("Image uploaded");
+      const res = await fetch("https://api.cloudinary.com/v1_1/dtzk3edsz/image/upload", {
+        method: "POST",
+        body: formData,
+      });
+  
+      const data = await res.json();
+      console.log(data); // You can check what it returns!
+  
+      if (data.secure_url) {
+        setImage(data.secure_url); // store the Cloudinary image URL
+        toast.success("Image uploaded");
+      } else {
+        toast.error("Cloudinary upload failed");
+      }
     } catch (err) {
+      console.error("Cloudinary upload error", err);
       toast.error("Image upload failed");
     }
   };
+  
 
   const handleUpdate = async (e) => {
     e.preventDefault();

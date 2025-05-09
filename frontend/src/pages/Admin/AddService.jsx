@@ -118,7 +118,7 @@ const AddServicePage = () => {
           <label className="font-medium">Working Hours</label>
           <div className="flex gap-2">
             <input
-              type="text"
+              type="time"
               name="start"
               placeholder="Start (e.g., 09:00 AM)"
               className="border p-2 rounded w-1/2"
@@ -127,7 +127,7 @@ const AddServicePage = () => {
               required
             />
             <input
-              type="text"
+              type="time"
               name="end"
               placeholder="End (e.g., 06:00 PM)"
               className="border p-2 rounded w-1/2"

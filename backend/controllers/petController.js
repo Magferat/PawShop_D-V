@@ -17,7 +17,7 @@ const addPet = asyncHandler(async (req, res) => {
       description,
       vaccinated,
       neutered,
-      // image,
+      image,
       location,
     } = req.fields;     //these fields are coming from the frontend using formidable
 
