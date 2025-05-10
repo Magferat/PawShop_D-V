@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 //
 import User from "../models/userModel.js";
-import Pet from "../models/petModel.js"; 
+import Pet from "../models/petModel.js";
 import Complaint from '../models/complaintModel.js';
 import Coupon from '../models/couponModel.js';
 import Order from "../models/orderModel.js";
@@ -249,38 +249,7 @@ const deleteUserReview = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Review removed" });
 });
 
-// const updateUserById = asyncHandler(async (req, res) => {
-//   const user = await User.findById(req.params.id);
 
-//   if (user) {
-//     if (req.body.email) {
-//       const existingEmail = await User.findOne({ email: req.body.email });
-//       if (existingEmail && existingEmail._id.toString() !== user._id.toString()) {
-//         res.status(400);
-//         throw new Error("Email already in use");
-//       }
-//       user.email = req.body.email;
-//     }
-
-//     user.username = req.body.username || user.username;
-
-//     if (req.body.isAdmin !== undefined) {
-//       user.isAdmin = req.body.isAdmin;
-//     }
-
-//     const updatedUser = await user.save();
-
-//     res.json({
-//       _id: updatedUser._id,
-//       username: updatedUser.username,
-//       email: updatedUser.email,
-//       isAdmin: updatedUser.isAdmin,
-//     });
-//   } else {
-//     res.status(404);
-//     throw new Error("User not found");
-//   }
-// });
 
 export {
   createUser,
@@ -291,7 +260,6 @@ export {
   updateCurrentUserProfile,
   deleteUserById,
   getUserById,
-  // updateUserById,
   addUserReview,
   getPublicUserProfile,
   deleteUserReview,

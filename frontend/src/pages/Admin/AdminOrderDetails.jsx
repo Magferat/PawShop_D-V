@@ -1,42 +1,4 @@
-// // pages/admin/AdminOrderDetails.jsx
-// import React from "react";
-// import { useParams } from "react-router-dom";
-// import { useGetOrderDetailsQuery } from "../../redux/api/orderApiSlice";
 
-// const AdminOrderDetails = () => {
-//   const { id } = useParams();
-//   const { data: order, isLoading, error } = useGetOrderDetailsQuery(id);
-
-//   return (
-//     <div className="max-w-4xl mx-auto p-4">
-//       <h2 className="text-xl font-bold mb-2">Order Details</h2>
-
-//       {isLoading ? (
-//         <p>Loading...</p>
-//       ) : error ? (
-//         <p className="text-red-500">{error?.data?.message || error.error}</p>
-//       ) : (
-//         <div className="space-y-2">
-//           <p><strong>Order ID:</strong> {order._id}</p>
-//           <p><strong>User:</strong> {order.user?.username}</p>
-//           <p><strong>Total Price:</strong> ৳{order.totalPrice}</p>
-//           <p><strong>Shipping Address:</strong> {order.shippingAddress?.address}</p>
-//           <hr />
-//           <h3 className="font-semibold mt-4">Items:</h3>
-//           <ul className="list-disc ml-6">
-//             {order.orderItems.map((item, idx) => (
-//               <li key={idx}>
-//                 {item.name} — Qty: {item.qty} — ৳{item.price}
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default AdminOrderDetails;
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { useGetOrderDetailsQuery } from "../../redux/api/orderApiSlice";

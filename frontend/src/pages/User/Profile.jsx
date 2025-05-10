@@ -17,8 +17,6 @@ const Profile = () => {
   const [uploading, setUploading] = useState(false);
 
   const { userInfo } = useSelector((state) => state.auth);
-
-  // Using custom hooks for mutations
   const [updateProfile, { isLoading: loadingUpdateProfile }] = useProfileMutation();
   const [uploadImage, { isLoading: loadingImageUpload }] = useUploadImageMutation();
 
@@ -28,7 +26,7 @@ const Profile = () => {
     console.log("User Image:", userInfo)
     setUserName(userInfo.username);
     setEmail(userInfo.email);
-    setImage(userInfo.image || ""); // preload image if it exists
+    setImage(userInfo.image || "");
   }, [userInfo]);
 
   const submitHandler = async (e) => {

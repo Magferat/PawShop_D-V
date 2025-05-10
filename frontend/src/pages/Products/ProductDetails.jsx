@@ -16,10 +16,8 @@ import {
   FaStore,
 } from "react-icons/fa";
 import moment from "moment";
-// import HeartIcon from "./HeartIcon";
 import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
-// import { addToCart } from "../../redux/features/cart/cartSlice";
 import { useAddToCartMutation } from "../../redux/features/cart/cartApiSlice";
 
 const ProductDetails = () => {
@@ -31,7 +29,7 @@ const ProductDetails = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
-  const[addToCartApi] = useAddToCartMutation();
+  const [addToCartApi] = useAddToCartMutation();
 
   const {
     data: product,
@@ -61,19 +59,12 @@ const ProductDetails = () => {
     }
   };
 
-  // const addToCartHandler = () => {
-  //   dispatch(addToCart({ ...product, qty }));
-  //   toast.success("Item added successfully", {
-  //     position: toast.POSITION.TOP_RIGHT,
-  //     autoClose: 2000,
-  //   });
-  // };
+
 
   const addToCartHandler = async () => {
     try {
       await addToCartApi({ productId: product._id, qty }).unwrap();
       toast.success("Added to cart");
-      // navigate("/cart"); // or /productshop if that's your flow
     } catch (err) {
       toast.error(err?.data?.message || "Failed to add to cart");
     }
@@ -88,7 +79,7 @@ const ProductDetails = () => {
         >
           &larr; Go Back
         </Link>
-  
+
         {isLoading ? (
           <Loader />
         ) : error ? (
@@ -106,17 +97,17 @@ const ProductDetails = () => {
                   className="rounded-xl shadow-md w-full h-[300px] object-cover"
                 />
               </div>
-  
+
               {/* Product Info */}
               <div className="flex-1 flex flex-col justify-between text-gray-800">
                 <div>
                   <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
                   <p className="text-gray-500 mb-4">{product.description}</p>
-  
+
                   <p className="text-4xl font-extrabold text-green-700 mb-6">
                     ${product.price}
                   </p>
-  
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 text-sm mb-6">
                     <div>
                       <p className="flex items-center mb-3">
@@ -144,30 +135,29 @@ const ProductDetails = () => {
                     </div>
                   </div>
                 </div>
-  
-                {/* Quantity & Button */}
+
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <Ratings
                     value={product.rating}
                     text={`${product.numReviews} reviews`}
                   />
-  
+
                   {product.countInStock > 0 && (
                     <div>
-                    <select
-                      value={qty}
-                      onChange={(e) => setQty(Number(e.target.value))}
-                      className="p-2 w-[6rem] border border-gray-300 rounded-lg text-gray-700"
-                    >
-                      {[...Array(product.countInStock).keys()].map((x) => (
-                        <option key={x + 1} value={x + 1}>
-                          {x + 1}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                      <select
+                        value={qty}
+                        onChange={(e) => setQty(Number(e.target.value))}
+                        className="p-2 w-[6rem] border border-gray-300 rounded-lg text-gray-700"
+                      >
+                        {[...Array(product.countInStock).keys()].map((x) => (
+                          <option key={x + 1} value={x + 1}>
+                            {x + 1}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   )}
-  
+
                   <button
                     onClick={addToCartHandler}
                     disabled={product.countInStock === 0}
@@ -178,8 +168,7 @@ const ProductDetails = () => {
                 </div>
               </div>
             </div>
-  
-            {/* Tabs Section */}
+
             <div className="mt-12">
               <ProductTabs
                 loadingProductReview={loadingProductReview}
@@ -197,7 +186,7 @@ const ProductDetails = () => {
       </div>
     </>
   );
-  
+
 };
 
 export default ProductDetails;

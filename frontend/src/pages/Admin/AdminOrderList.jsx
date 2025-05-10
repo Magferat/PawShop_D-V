@@ -1,6 +1,4 @@
-// pages/admin/AdminOrderList.jsx
-// import React from "react";
-// import { useGetAllOrdersQuery } from "../../features/api/orderApiSlice";
+
 import { useGetAllOrdersQuery } from "../../redux/features/cart/orderApiSlice";
 import { Link } from "react-router-dom";
 

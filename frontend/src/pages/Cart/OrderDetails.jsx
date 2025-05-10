@@ -21,13 +21,13 @@ const OrderDetails = () => {
 
     const handleReorder = async () => {
         try {
+
             for (const item of order.orderItems) {
                 const qty = item.qty;
 
-                // If item.product is an object, adjust accordingly
                 const productId = item.product._id || item.product;
 
-                const clampedQty = Math.max(1, Math.min(qty, item.product.countInStock || 100)); // default stock fallback
+                const clampedQty = Math.max(1, Math.min(qty, item.product.countInStock || 100));
 
                 await addToCart({
                     productId,
@@ -47,9 +47,9 @@ const OrderDetails = () => {
 
     const handleGoBack = () => {
         if (isFromPlaceOrder) {
-            navigate("/"); // Or wherever you want to go after new order
+            navigate("/");
         } else {
-            navigate(-1); // Go back to previous page (order list)
+            navigate(-1);
         }
     };
 
@@ -117,21 +117,14 @@ const OrderDetails = () => {
             ">
             <div className="flex justify-between items-center mb-6 ">
                 <h1 className="text-2xl font-bold text-green-700">Order Details</h1>
-                {/* <div className="flex justify-end mt-8"> */}
                 <div className="">
-
                     <button
                         onClick={handleDownloadInvoice}
                         className=" px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded shadow mt-6"
                     >
                         Download Invoice
                     </button>
-                    {/* <button
-                        onClick={handleReorder}
-                        className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded shadow flex justify-end mt-8"
-                    >
-                        Reorder
-                    </button> */}
+
                     {!isFromPlaceOrder && (
                         <button
                             onClick={handleReorder}
@@ -141,11 +134,6 @@ const OrderDetails = () => {
                         </button>
                     )}
                 </div>
-
-
-
-                {/* </div> */}
-
 
             </div>
 
@@ -158,8 +146,6 @@ const OrderDetails = () => {
                 <>
                     <div className="mb-6">
                         <p className="text-gray-700 overflow-hidden"><strong>Order ID: </strong> {order._id}</p>
-                        {/* <p className="text-gray-700">
-                        </p> */}
                         <p className=""> <strong>Order Date:</strong>
                             {new Date(order.createdAt).toLocaleDateString("en-US", {
                                 year: "numeric",
@@ -217,18 +203,11 @@ const OrderDetails = () => {
                         ))}
                     </div>
                     <div>
-                        {/* <Link
-                            to="/my-orders"
-                            className="text-pink-700 font-semibold hover:underline mb-4 inline-block"
-                        >
-                            &larr; Go Back
-                        </Link>                     */}
 
 
                         {!isFromPlaceOrder && (
                             <Link
                                 onClick={handleGoBack}
-                                // to="/my-orders"
                                 className="text-green-700 font-semibold hover:underline mb-4 inline-block"
                             >
                                 &larr; Go Back
@@ -238,17 +217,13 @@ const OrderDetails = () => {
 
                         {isFromPlaceOrder && (
                             <button
-                            // onClick={handleReorder}
-
                             >
                                 <Link
-                                    // onClick={handleGoBack}
                                     to="/productshop"
                                     className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded shadow flex justify-end mt-8"
                                 >
                                     &larr; Go To Shop
                                 </Link>
-                                {/* Reorder */}
                             </button>
 
                         )}

@@ -39,6 +39,7 @@ export const addToCart = async (req, res) => {
 
         if (existingItem) {
             const newQty = existingItem.qty + qty;
+            // newQty = qty;
 
             if (newQty <= 0) {
                 // Remove item if qty drops to 0 or below

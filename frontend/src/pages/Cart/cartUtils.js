@@ -21,7 +21,6 @@ export const updateCart = (state) => {
     ).toFixed(2);
     state.pointsEarnd = Math.fround(state.totalPrice / 10)
 
-    // Save the cart to localStorage
     localStorage.setItem("cart", JSON.stringify(state));
 
     return state;

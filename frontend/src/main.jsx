@@ -63,11 +63,7 @@ import EditPackagePage from "./pages/Admin/EditPackage.jsx";
 import AddPackagePage from "./pages/Admin/AddPackage.jsx";
 import AddServicePage from "./pages/Admin/AddService.jsx";
 
-// Complaint pages
-// import ComplaintForm from './pages/complaints/ComplaintForm';
-// import MyComplaints from './pages/complaints/MyComplaints';
-// import ComplaintListAdmin from './pages/complaints/ComplaintListAdmin';
-// import ComplaintDetails from './pages/complaints/ComplaintDetails';
+
 import ComplaintDetails from "./pages/Admin/ComplaintDetails.jsx";
 import ComplaintForm from "./pages/User/ComplaintForm.jsx";
 import ComplaintListAdmin from "./pages/Admin/ComplaintListAdmin.jsx";
@@ -75,7 +71,6 @@ import MyComplaints from "./pages/User/MyComplaints.jsx";
 
 
 
-//These are all frontend routes
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -95,7 +90,6 @@ const router = createBrowserRouter(
         <Route path="/pets/edit/:id" element={<EditPet />} />
         <Route path="/petlist" element={<PetList />} />
         <Route path="/owner/:id" element={<OwnerDetails />} />
-        {/* <Route path="/users/:id" element={<OwnerDetails />} /> */}
         <Route path="/couponshop" element={<ShopCoupons />} />
         <Route path="/my-coupons" element={<MyCoupons />} />
         <Route path="/profile/outgoing-requests" element={<OutgoingRequests />} />
