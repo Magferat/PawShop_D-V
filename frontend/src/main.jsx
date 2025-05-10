@@ -69,6 +69,7 @@ import ComplaintForm from "./pages/User/ComplaintForm.jsx";
 import ComplaintListAdmin from "./pages/Admin/ComplaintListAdmin.jsx";
 import MyComplaints from "./pages/User/MyComplaints.jsx";
 
+import AboutUs from "./pages/About.jsx";
 
 
 const router = createBrowserRouter(
@@ -80,6 +81,7 @@ const router = createBrowserRouter(
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/productshop" element={<Shop />} />
       <Route path="/petshop" element={<Petshop />} />
+      <Route path="/about" element={<AboutUs />} />
 
 
       {/* Registered users */}

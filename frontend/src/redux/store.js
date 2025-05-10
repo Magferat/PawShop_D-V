@@ -4,7 +4,7 @@ import { apiSlice } from "./api/apiSlice";
 import authReducer from "./features/auth/authSlice";
 import shopReducer from "../redux/features/shop/shopSlice";
 import petShopReducer from "../redux/features/petshop/petshopSlice";
-import cartReducer from "./features/Cart/cartSlice";
+import cartReducer from "./features/cart/cartSlice";
 
 const store = configureStore({
   reducer: {

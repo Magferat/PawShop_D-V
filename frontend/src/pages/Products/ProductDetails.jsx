@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
@@ -22,13 +22,13 @@ import { useAddToCartMutation } from "../../redux/features/cart/cartApiSlice";
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
+  const [addToCartApi] = useAddToCartMutation();
   const [addToCartApi] = useAddToCartMutation();
 
   const {

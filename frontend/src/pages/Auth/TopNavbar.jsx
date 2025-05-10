@@ -27,7 +27,7 @@ const TopNavbar = () => {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <img
-            src="../uploads/logo.png"
+            src="https://res.cloudinary.com/dtzk3edsz/image/upload/v1746558033/logo_ih2vsz.png"
             alt="PawStore Logo"
             className="h-10 w-15 object-cover"
           />

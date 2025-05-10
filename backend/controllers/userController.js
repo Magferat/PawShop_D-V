@@ -8,6 +8,7 @@ import Complaint from '../models/complaintModel.js';
 import Coupon from '../models/couponModel.js';
 import Order from "../models/orderModel.js";
 import Request from "../models/petrequestModel.js";
+import Appointment from "../models/appointmentModel.js";
 
 const createUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -152,7 +153,8 @@ const deleteUserById = asyncHandler(async (req, res) => {
     Complaint.deleteMany({ submittedBy: user._id }),
     Coupon.deleteMany({ user: user._id }),
     Order.deleteMany({ user: user._id }),
-    Request.deleteMany({ requesteder: user._id })
+    Request.deleteMany({ requester: user._id }),
+    Appointment.deleteMany({ user: user._id })
   ]);
 
   // Delete the user
